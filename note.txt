@@ -1,0 +1,10 @@
+
+node -v
+npm -v
+npm init -y
+npm i -g es-checker
+npm list -g
+npm --help
+npm install --help
+npm uninstall -g es-checker
+npm un -g es-checker

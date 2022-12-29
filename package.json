@@ -1,0 +1,20 @@
+{
+  "name": "10_nodejs_p",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KrisYan-coding/10_Nodejs_p.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KrisYan-coding/10_Nodejs_p/issues"
+  },
+  "homepage": "https://github.com/KrisYan-coding/10_Nodejs_p#readme"
+}
