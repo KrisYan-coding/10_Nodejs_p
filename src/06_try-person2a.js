@@ -1,5 +1,5 @@
 
-const {Person, f2} = require('./Person2'); 
+const {Person, f2} = require('./03_Person2'); 
 // --匯入時解構
 
 console.log('Hiii');

@@ -19,7 +19,7 @@ const f2 = a => a*a*a;
 
 console.log('這是在 Person2 裡面')
 
-module.exports = {Person, f2}; //同時匯出多個
+module.exports = {Person, f2}; //同時匯出多個 {} 或 [] 都可
 // --匯出什麼對方就只能匯入什麼
 
 console.log('這是在 Person2 裡面最後')

@@ -1,5 +1,5 @@
 
-const Person2 = require('./Person2'); 
+const Person2 = require('./03_Person2'); 
 // --Person2 = {Person, f2} 這個 object
 // --require 時會執行被 require的檔案全部( Person2.js )
 

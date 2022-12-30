@@ -8,3 +8,6 @@ npm --help
 npm install --help
 npm uninstall -g es-checker
 npm un -g es-checker
+
+
+ESM = ES module

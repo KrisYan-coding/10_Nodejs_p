@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="info"></div>
+
+    <script type="module">
+    // 目前 chrome / edge / firefox 都可以在 html(前端) 使用 ESM 
+    // 前端不能用 CJS
+        import Person, {f1, f2} from './08_Person2.mjs';
+
+        const p1 = new Person('David', 25);
+
+        console.log(p1.toString());
+        console.log(f1(2));
+
+        document.querySelector('.info').innerHTML = p1.toString();
+    </script>
+    <script type="module">
+        // console.log(p1); // 不同的script，不同的module
+    </script>
+</body>
+</html>
