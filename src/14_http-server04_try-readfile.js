@@ -14,6 +14,7 @@ const server = http.createServer(async (req, res) => {
   );
   // result = read data
 
+  console.log(result.toString());
   res.end(result);
 });
 
