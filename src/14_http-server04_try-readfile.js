@@ -4,13 +4,13 @@ const http = require('http');
 const fs = require('fs/promises'); // 使用 fs promise API
 
 const server = http.createServer(async (req, res) => {
-  const result = await fs.writeFile(
-    __dirname + '/header01.txt',
-    JSON.stringify(req.headers, null, 4),
+  console.log('-------------', req.url);
+  const result = await fs.readFile(
+    __dirname + '/try-readfile.txt',
   );
-  // result = undefined : write 不會回傳值
+  // result = read data
 
-  res.end(`<h2>result: ${result}</h2>`);
+  res.end(result);
 });
 
 server.listen(3000);
