@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/KrisYan-coding/10_Nodejs_p/issues"
   },
-  "homepage": "https://github.com/KrisYan-coding/10_Nodejs_p#readme"
+  "homepage": "https://github.com/KrisYan-coding/10_Nodejs_p#readme",
+  "devDependencies": {
+    "eslint": "^8.30.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  }
 }
