@@ -11,6 +11,7 @@ npm uninstall -g es-checker
 npm un -g es-checker
 npm i dotenv --save-dev (此套件開發時會用到，發布後用不到)
 npm un dotenv --save-dev
+npm i (自動安裝 package.json "dependencies"全部的套件)
 
 node src\001.js
 nodemon src\001.js
@@ -40,7 +41,14 @@ process: node 內建物件
 // --------------------------
 node_modules: 此專案所用到的套件
 package.json "dependencies" 此專案安裝那些套件
+
 package-lock.json 展開所有用到的套件(包含依賴的套件)
+
+package.json "scripts" 設定cmd snippet
+npm start (start, test 不用加 run)
+npm run dev
+
+package.json "main" 主程式 (nodemon 預設執行)
 
 
 // --------------------------
