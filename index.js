@@ -39,7 +39,20 @@ app.get('/json-sales', (req, res) => {
   // res.json(data);
   // data 轉換為json字串，送給client，並設定 res Header/Content-Type: application/json
 
-  res.render('json-sales', {data});
+  const orderBy = req.query.orderBy || 'id';
+  console.log(orderBy);
+  let dataSorted = data.sort((a, b) => {
+    return (a[orderBy] > b[orderBy]) ? 1 : -1;
+  });
+  res.render('json-sales', {dataSorted});
+});
+
+app.get('/try-qs', (req, res) => {
+  console.log(req.query);
+  // --req.query 將 query string 轉為物件
+
+  // 把client req 的 query string 在傳回去給 client--
+  res.json(req.query);
 });
 
 // app.use('/a.html', (req, res) => {

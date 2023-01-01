@@ -60,12 +60,15 @@ package.json "main": index.js 主程式 (nodemon 預設執行index.js)
 
 
 // --------------------------[輸入輸出]
-***輸出給前端***
+***輸出給 client***
 -> 同一個路由使用下面其中一個一次就好
     res.end() : node
     res.send() : node express；自動判斷 Content-Type
     res.render() : node express 呈現樣板
     res.json() : Content-Type: applocation/json
+
+***client 輸入的資訊***
+    req.query : 取得 query string parameters
 
 
 
