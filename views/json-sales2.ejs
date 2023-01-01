@@ -6,8 +6,15 @@
 <div class="container">
     <div class="row">
         <div class="col">
+            <% /* 回應排序資料 meth1 %> 
             <% for( let k in handleObj ) { %>
-                <a class="btn btn-outline-primary" href="?orderby=<%= k %> "><%= handleObj[k].label %> </a>
+                <a class="btn <%= handleObj[k].selected ? 'btn-primary' : 'btn-outline-primary'%> " href="?orderby=<%= k %> "><%= handleObj[k].label %> </a>
+            <% } %>
+            <% */ %> 
+
+            <% for( let k in handleObj ) {
+                const style = orderby===k ? 'btn-primary' : 'btn-outline-primary' %>
+                <a class="btn <%= style %> " href="?orderby=<%= k %> "><%= handleObj[k].label %> </a>
             <% } %>
         </div>
     </div>
