@@ -32,13 +32,14 @@ app.get('/', (req, res) => {
 // 回應 json--
 app.get('/json-sales', (req, res) => {
   const data = require(__dirname + '/data/sales.json');
+  // --require json 檔，會自動做 JSON.parse() 轉換為原生類型
   // --若變更 json 檔內容，server要重新啟動(用nodemon每次存檔就會重新啟動)，才會重新require，前端才會更新
   // --CJS require可以在檔案的任何地方；ESM import 只能在檔案最上方
 
-  res.json(data);
+  // res.json(data);
   // data 轉換為json字串，送給client，並設定 res Header/Content-Type: application/json
 
-  // res.render('main');
+  res.render('json-sales', {data});
 });
 
 // app.use('/a.html', (req, res) => {

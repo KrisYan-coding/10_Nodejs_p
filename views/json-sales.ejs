@@ -1,18 +1,32 @@
-
-<%- include('parts/html-head')  %>
+<%- include('parts/html-head') %>
 <!-- --要用ejsesc (不要跳脫 html) -->
 <!-- --路徑開頭不要'/', .ejs 可以省略-->
-<%- include('parts/navbar') %> 
-
+<%- include('parts/navbar') %>
 
 <div class="container">
     <div class="row">
         <div class="col">
-            <h2><%= name %> </h2>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">編號</th>
+                        <th scope="col">姓名</th>
+                        <th scope="col">年齡</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for( let s of data) { %>
+                        <tr>
+                            <td><%= s.id %> </td>
+                            <td><%= s.name %> </td>
+                            <td><%= s.age %> </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-
-<%- include('parts/scripts')  %>
-<%- include('parts/html-foot')  %>
+<%- include('parts/scripts') %>
+<%- include('parts/html-foot') %>

@@ -61,9 +61,12 @@ package.json "main": index.js 主程式 (nodemon 預設執行index.js)
 
 // --------------------------[輸入輸出]
 ***輸出給前端***
+-> 同一個路由使用下面其中一個一次就好
     res.end() : node
-    res.send() : node express
+    res.send() : node express；自動判斷 Content-Type
     res.render() : node express 呈現樣板
+    res.json() : Content-Type: applocation/json
+
 
 
 // --------------------------[others]
