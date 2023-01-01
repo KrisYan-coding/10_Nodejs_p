@@ -47,6 +47,41 @@ app.get('/json-sales', (req, res) => {
   res.render('json-sales', {dataSorted});
 });
 
+app.get('/json-sales2', (req, res) => {
+  const data = require(__dirname + '/data/sales.json');
+
+  const handleObj = {
+    name_asc: {
+      label : '姓名由小到大',
+      sort : (a, b) => {
+
+      }
+    },
+    name_desc: {
+      label : '姓名由大到小',
+      sort : (a, b) => {
+
+      }
+    },
+    age_asc: {
+      label : '年齡由小到大',
+      sort : (a, b) => {
+
+      }
+    },
+    age_desc: {
+      label : '年齡由大到小',
+      sort : (a, b) => {
+
+      }
+    }
+  };
+
+  
+  
+  res.render('json-sales2', {data, handleObj});
+});
+
 app.get('/try-qs', (req, res) => {
   console.log(req.query);
   // --req.query 將 query string 轉為物件
