@@ -29,6 +29,9 @@ npm run dev
 // --------------------------[definition]
 ESM = ES module
 靜態內容 = 內容沒有經過後端程式或server去做變更(純 html/CSS/JS/image)
+樣板引擎 = 在 html 裡面寫程式
+-> 把 js 寫在 html 放在 .ejs
+-> 把 php 寫在 html 放在 .php
 
 
 // --------------------------[process]
@@ -46,10 +49,22 @@ process: node 內建物件
 // --------------------------[project]
 ***資料夾***
 public/static : 存放靜態內容
-node_modules: 此專案所有用到的套件
+node_modules : 此專案所有用到的套件
+views : 存放樣板引擎
 
 ***設定檔***
 .env : 環境變數(等號左右不要空白)
 package.json "dependencies" : 此專案安裝那些套件
 package-lock.json 展開所有此專案用到的套件(包含依賴的套件)
 package.json "main": index.js 主程式 (nodemon 預設執行index.js)
+
+
+// --------------------------[輸入輸出]
+***輸出給前端***
+    res.end() : node
+    res.send() : node express
+    res.render() : node express 呈現樣板
+
+
+// --------------------------[others]
+1. 大專不要用 EJS，用 react
