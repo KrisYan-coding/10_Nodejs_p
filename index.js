@@ -14,7 +14,12 @@ app.get('/', (req, res) => {
   // --res.send() 不要放數值
 });
 
+// app.use('/a.html', (req, res) => {
+//   res.send(`<h2>假的a.html</h2>`);
+// });
+
 // 建立可以訪問'piblic'資料夾中的靜態內容的路由--
+// 只能用 get
 app.use(express.static('public'));
 
 // ****所有路由要放在最後一道防線之前****

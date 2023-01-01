@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/14_http-server04_try-readfile.js",
+    "dev": "nodemon index.js",
     "start": "nodemon src/13_http-server03.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
