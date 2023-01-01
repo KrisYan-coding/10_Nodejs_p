@@ -25,6 +25,7 @@ app.get('/', (req, res) => {
   res.render('main', { name: '顏瑜君' });
   // --因為已註冊樣板引擎在 views，所以直接打檔名
   // --res.render() 呈現樣板 main 到前端，並給變數值
+  // --template 檔名前面不要加 '/'
 });
 
 // app.use('/a.html', (req, res) => {
