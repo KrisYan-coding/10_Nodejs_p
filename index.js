@@ -13,6 +13,13 @@ const app = express();
 app.set('view engine', 'ejs');
 // --app.set() : configure the behavior of the server
 
+// 建立 Top-level middleware (每個req都會經過 / 有順序的 / 當多個路由都需要此middleware時)***1
+// body-parser for urlencoded data--
+app.use(express.urlencoded({extended: false}));
+// body-parser for json data--
+app.use(express.json());
+
+
 // 3. 建立後端路由(routes)，有先後順序，路徑都要加'/'
 // =====================================================================
 // 當用 get 訪問 '/' 時，就執行 callback function--
@@ -135,21 +142,28 @@ app.get('/try-qs', (req, res) => {
   res.json(req.query);
 });
 
-// 建立 middleware urlencodedParser 用來解析 post資料--
-const urlencodedParser = express.urlencoded({extended: false});
-// --使用 express 內建功能 body-parser
-// --extend: false -> 不要使用 qs 套件
-// --Content-Type 為 application/x-www-form-urlencoded 才會處理
+// create middleware for single route***1
+// // 建立 middleware 用來解析 post資料--
+// const urlencodedParser = express.urlencoded({extended: false});
+// // --使用 express 內建功能 body-parser
+// // --extend: false -> 不要使用 qs 套件
+// // --Content-Type 為 application/x-www-form-urlencoded 才會處理
 
-const jsonParser = express.json();
-// --Content-Type 為 application/json 才會處理
+// const jsonParser = express.json();
+// // --Content-Type 為 application/json 才會處理
 
 
-app.post('/try-post', [urlencodedParser, jsonParser], (req, res) => {
-// --若有多個 middleware 可以用 array 包起來 [middleware1, middleware2]，依照順序執行(但不一定會處理，例如 urlencodedParser, jsonParser 會判斷 Content-Type)
-  console.log('req.body', req.body); // object
+// app.post('/try-post', [urlencodedParser, jsonParser], (req, res) => {
+// // --若有多個 middleware 可以用 array 包起來 [middleware1, middleware2]，依照順序執行(但不一定會處理，例如 urlencodedParser, jsonParser 會判斷 Content-Type)
+//   console.log('req.body', req.body); // object
+//   res.json(req.body);
+//   // --若沒經過 middleware 解析，req.body = undefined
+// });
+
+// change the middleware to Top-level middleware***1
+app.post('/try-post', (req, res) => {
+  console.log('req.body', req.body);
   res.json(req.body);
-  // --若沒經過 middleware 解析，req.body = undefined
 });
 
 app.get('/try-post', (req, res) => {
