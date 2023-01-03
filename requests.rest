@@ -1,0 +1,23 @@
+
+GET http://localhost:3002/try-post?a=100&b=200
+
+
+###
+
+
+POST  http://localhost:3002/try-post
+Content-Type: application/x-www-form-urlencoded
+
+a=100&b=嗨
+
+
+###
+
+
+POST  http://localhost:3002/try-post
+Content-Type: application/json
+
+{
+    "a" : 100,
+    "b" : "您好"
+}
