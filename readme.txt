@@ -71,7 +71,11 @@ package.json "main": index.js 主程式 (nodemon 預設執行index.js)
     req.query : 取得 GET query string parameters
     req.body : 取得 POST 表單資料
 
-
+// --------------------------[前端 query string to obj]
+const usp = new URLSearchParams(location.search);
+  usp.toString() = 'a=100&b=200'
+  location.search = 'a=100&b=200'
+const obj = [...usp.entries()];
 
 // --------------------------[others]
 1. 大專不要用 EJS，用 react

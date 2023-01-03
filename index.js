@@ -152,6 +152,10 @@ app.post('/try-post', [urlencodedParser, jsonParser], (req, res) => {
   // --若沒經過 middleware 解析，req.body = undefined
 });
 
+app.get('/try-post', (req, res) => {
+  res.json(req.query);
+});
+
 // app.use('/a.html', (req, res) => {
 //   res.send(`<h2>假的a.html</h2>`);
 // });
