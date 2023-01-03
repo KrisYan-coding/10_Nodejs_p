@@ -68,9 +68,11 @@ package.json "main": index.js 主程式 (nodemon 預設執行index.js)
     res.json() : Content-Type: applocation/json
 
 ***client 輸入的資訊***
-    req.query : 取得 query string parameters
+    req.query : 取得 GET query string parameters
+    req.body : 取得 POST 表單資料
 
 
 
 // --------------------------[others]
 1. 大專不要用 EJS，用 react
+2. browser 直接 query -> method: GET

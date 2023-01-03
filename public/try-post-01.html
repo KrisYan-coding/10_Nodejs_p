@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form name="form1">
+        <input type="text" name="account" placeholder="帳號"><br>
+        <input type="text" name="password" placeholder="密碼"><br>
+
+        <input type="submit">
+    </form>
+
+    <div class="info"></div>
+    <pre class="info"></pre>
+
+
+    <script>
+        const form1 = document.form1;
+
+
+        form1.onsubmit = (event) => {
+            event.preventDefault(); //不要用傳統的表單送出
+
+            // ***不要這樣用***
+            // // 用 Formdata，fetch 會自動設定 Content-Type = multipart-formdata，但 try-post 的 body-parser 不能處理這種 Content-Type
+            // const fd = new FormData(form1);
+            // fetch('/try-post', {
+            // // --直接用路由名稱
+            //     method: 'POST',
+            //     body: fd
+            // })
+            // ****************
+
+            // 1. 使用 Content-Type : application/x-www-form-urlencoded
+            const fd = new FormData(form1);
+            // 建立或解析 urlencoded/query-string formatted string
+            const usp = new URLSearchParams(fd);
+
+            fetch('/try-post', {
+                method: 'POST',
+                body: usp.toString(),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+                .then(r => r.json())
+                .then(data => {
+                    console.log('data', data)
+                    // --server res.json()，client 收到 object
+                    document.querySelector('div.info').innerHTML = JSON.stringify(data, null, 4);
+                    document.querySelector('pre.info').innerHTML = JSON.stringify(data, null, 4);
+                    // --收到的 data-object 變成 JSON 字串
+                })
+
+        }
+
+    </script>
+</body>
+
+</html>

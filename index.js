@@ -22,7 +22,8 @@ app.set('view engine', 'ejs');
 // });
 
 // 回應 template main--
-app.get('/', (req, res) => {
+app.get(['/', '/Home'], (req, res) => {
+// --路由路徑可以用 array 包多個，只要符合其中一個就會進來
   res.render('main', { name: '顏瑜君' });
   // --因為已註冊樣板引擎在 views，所以直接打檔名
   // --res.render() 呈現樣板 main 到前端，並給變數值
@@ -132,6 +133,23 @@ app.get('/try-qs', (req, res) => {
 
   // 把client req 的 query string 在傳回去給 client--
   res.json(req.query);
+});
+
+// 建立 middleware urlencodedParser 用來解析 post資料--
+const urlencodedParser = express.urlencoded({extended: false});
+// --使用 express 內建功能 body-parser
+// --extend: false -> 不要使用 qs 套件
+// --Content-Type 為 application/x-www-form-urlencoded 才會處理
+
+const jsonParser = express.json();
+// --Content-Type 為 application/json 才會處理
+
+
+app.post('/try-post', [urlencodedParser, jsonParser], (req, res) => {
+// --若有多個 middleware 可以用 array 包起來 [middleware1, middleware2]，依照順序執行(但不一定會處理，例如 urlencodedParser, jsonParser 會判斷 Content-Type)
+  console.log('req.body', req.body); // object
+  res.json(req.body);
+  // --若沒經過 middleware 解析，req.body = undefined
 });
 
 // app.use('/a.html', (req, res) => {
