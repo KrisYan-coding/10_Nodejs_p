@@ -1,7 +1,8 @@
 # my ignore
 public/fontawesome/
 upload_temp/
-public/uploads/
+public/uploads/*jpg
+public/uploads/*png
 
 
 
