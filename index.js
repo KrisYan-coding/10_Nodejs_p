@@ -1,9 +1,13 @@
 /* eslint-disable quotes */
 require('dotenv').config();
-// ------[multer]
-const multer = require('multer');
-const upload = multer({dest: 'upload_temp/'});
+
+// ------[multer 簡單版(只設暫存路徑)]
+// const multer = require('multer');
+// const upload = multer({dest: 'upload_temp/'});
 // --dest: destination 上傳資料暫存的資料夾
+
+// ------[multer 複雜版(fileFilter / storage)]
+const upload = require('./modules/upload-img');
 
 // 1. require express
 // =====================================================================
@@ -200,7 +204,9 @@ app.post('/try-post-form', (req, res) => {
 // ----------[multer]
 app.post('/try-upload', upload.single('avatar'), (req, res) => {
 // --upload.single('avatar'): middleware ，上傳單一檔案 name: 'avatar'
-  res.json(req.file);
+  console.log('req.file', !req.file);
+  let data = !req.file? '格式不符' : req.file;
+  res.json(data);
 });
 
 
