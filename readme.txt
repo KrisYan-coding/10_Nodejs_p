@@ -70,6 +70,8 @@ package.json "main": index.js 主程式 (nodemon 預設執行index.js)
 ***client 輸入的資訊***
     req.query : 取得 GET query string parameters
     req.body : 取得 POST 表單資料
+    req.file : 取的上傳的單一檔案
+    req.files : 取的上傳的多個檔案
 
 // --------------------------[前端 query string to obj]
 const usp = new URLSearchParams(location.search);

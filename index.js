@@ -1,5 +1,9 @@
 /* eslint-disable quotes */
 require('dotenv').config();
+// ------[multer]
+const multer = require('multer');
+const upload = multer({dest: 'upload_temp/'});
+// --dest: destination 上傳資料暫存的資料夾
 
 // 1. require express
 // =====================================================================
@@ -189,8 +193,16 @@ app.get('/try-post-form', (req, res) => {
 app.post('/try-post-form', (req, res) => {
   console.log('req.body', req.body);
   res.render('try-post-form', req.body);
-  // 在 template裡面用 locals 去拿到資料
+  // --在 template裡面用 locals 去拿到資料
 });
+
+
+// ----------[multer]
+app.post('/try-upload', upload.single('avatar'), (req, res) => {
+// --upload.single('avatar'): middleware ，上傳單一檔案 name: 'avatar'
+  res.json(req.file);
+});
+
 
 // ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
