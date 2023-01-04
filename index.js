@@ -28,7 +28,8 @@ app.use(express.json());
 //   // --res.send() 不要放數值
 // });
 
-// 回應 template main--
+
+// ----------[回應 template main]
 app.get(['/', '/Home'], (req, res) => {
 // --路由路徑可以用 array 包多個，只要符合其中一個就會進來
   res.render('main', { name: '顏瑜君' });
@@ -37,7 +38,8 @@ app.get(['/', '/Home'], (req, res) => {
   // --template 檔名前面不要加 '/'
 });
 
-// 回應 json--
+
+// ----------[回應 json]
 app.get('/json-sales', (req, res) => {
   const data = require(__dirname + '/data/sales.json');
   // --require json 檔，會自動做 JSON.parse() 轉換為原生類型
@@ -55,6 +57,8 @@ app.get('/json-sales', (req, res) => {
   res.render('json-sales', {dataSorted});
 });
 
+
+// ----------[呈現資料(list)，排序資料]
 // 回應排序資料 meth1--
 // app.get('/json-sales2', (req, res) => {
 //   const data = require(__dirname + '/data/sales.json');
@@ -134,6 +138,7 @@ app.get('/json-sales2', (req, res) => {
   res.render('json-sales2', {data, handleObj, orderby});
 });
 
+// ----------[query string]
 app.get('/try-qs', (req, res) => {
   console.log(req.query);
   // --req.query 將 query string 轉為物件
@@ -142,6 +147,8 @@ app.get('/try-qs', (req, res) => {
   res.json(req.query);
 });
 
+
+// ----------[GET / POST urlencoded / json]
 // create middleware for single route***1
 // // 建立 middleware 用來解析 post資料--
 // const urlencodedParser = express.urlencoded({extended: false});
@@ -170,14 +177,32 @@ app.get('/try-post', (req, res) => {
   res.json(req.query);
 });
 
+// ----------[表單送給自己]
+// borwser url request: 回應表單
+app.get('/try-post-form', (req, res) => {
+  res.render('try-post-form');
+  // 法2:
+  // res.render('try-post-form', {account: '', password: ''});
+});
+
+// form submit: 回應有帶有資料的表單
+app.post('/try-post-form', (req, res) => {
+  console.log('req.body', req.body);
+  res.render('try-post-form', req.body);
+  // 在 template裡面用 locals 去拿到資料
+});
+
+// ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
 //   res.send(`<h2>假的a.html</h2>`);
 // });
 
+// ----------[public]
 // 建立可以訪問'piblic'資料夾中的靜態內容的路由--
 // 只能用 get
 app.use(express.static('public'));
 
+// ----------[最後一道防線]
 // ****所有路由要放在最後一道防線之前****
 // 建立最後一道防線--
 // app.use : 所有 http 的 method 都可以攔截，不設定路徑可攔截所有路徑--

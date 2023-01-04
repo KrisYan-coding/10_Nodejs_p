@@ -77,6 +77,22 @@ const usp = new URLSearchParams(location.search);
   location.search = 'a=100&b=200'
 const obj = [...usp.entries()];
 
+// --------------------------[判斷變數是否有設定]
+typeof aaa
+>>>'undefined'
+
+obj = {};
+obj.aaa;
+>>>'undefined'
+
+obj = {};
+obj.aaa.bbb;
+>>> error -> 一層可以兩層不行
+
+obj = {};
+obj.aaa?.bbb; -> 一層沒有就不要往下
+>>>'undefined'
+
 // --------------------------[others]
 1. 大專不要用 EJS，用 react
 2. browser 直接 query -> method: GET

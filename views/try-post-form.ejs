@@ -1,0 +1,32 @@
+<%- include('parts/html-head') %>
+<!-- --要用ejsesc (不要跳脫 html) -->
+<!-- --路徑開頭不要'/', .ejs 可以省略-->
+<%- include('parts/navbar') %>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <form method="post">
+            <!-- 沒有設定 action -> 送給自己(相同路徑) -->
+                <div class="mb-3">
+                    <label for="account" class="form-label">account</label>
+                    <input type="text" class="form-control" id="account" name="account">
+                    <div class="form-text"><%= (typeof account === 'undefined') ? '' : account %> </div>
+                    <!-- GET拿表單的時候沒有data，用 typeof 判斷變數是否存在(不會error) -->
+                    <!-- <div class="form-text"><%# account %> </div> -->
+                    <!-- 法2: 在index預設 GET的回傳資料{account: '', password: ''} -->
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">password</label>
+                    <input type="text" class="form-control" id="password" name="password">
+                    <div class="form-text"><%= locals.password ? password : '' %> </div>
+                    <!-- 法3: server 連同 template 回應的資料，會放在 locals 這個物件 -->
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('parts/scripts') %>
+<%- include('parts/html-foot') %>
