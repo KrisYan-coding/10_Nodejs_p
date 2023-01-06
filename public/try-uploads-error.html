@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form name="form1" onsubmit="submitFile(event)">
+        <input type="file" name="avatar" multiple/>
+        <input type="submit">
+    </form>
+
+    <div class="info"></div>
+
+    <script>
+        function submitFile(e){
+            e.preventDefault();
+
+            const fd = new FormData(document.form1);
+
+            let smtFiles = fd.getAll('avatar').map(el => {
+                return el.name;
+            });
+            // console.log('smtFiles', smtFiles);
+
+            fetch('/try-uploads-err', {
+                method: 'post',
+                body: fd
+            })
+            .then(r=>r.json())
+            .then(obj => {
+                const [code, files] = obj;
+
+                const succFiles = files.map(el => {
+                    return el.originalname;
+                })
+                // console.log('succFiles', succFiles);
+
+                let failFiles = [];
+                for(let smt of smtFiles){
+                    if (!succFiles.includes(smt)){
+                        failFiles.push(smt);
+                    }
+                }
+                
+                document.querySelector('.info').innerHTML = failFiles;
+            })
+        }
+    </script>
+</body>
+</html>

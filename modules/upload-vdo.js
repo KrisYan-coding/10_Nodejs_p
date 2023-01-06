@@ -3,8 +3,7 @@ const multer = require('multer');
 const {v4 : uuidv4} = require('uuid');
 
 const extMap = {
-  'image/jpeg': '.jpg',
-  'image/png': '.png',
+  'video/mp4': '.mp4',
 };
 
 // 定義一個 fileFilter 篩選要上傳的檔案
@@ -18,7 +17,10 @@ const fileFilter = (req, file, cb) => {
 
   // 如果檔案副檔名有在 extMap 裡面才上傳
   const uploadFlag = !! extMap[file.mimetype];
+  // console.log('extMap[file.mimetype]', extMap[file.mimetype]);
+  console.log('!!extMap[file.mimetype]',!!extMap[file.mimetype]);
   cb(null, uploadFlag);
+
 };
 
 // 定義一個 storage 用來儲存檔案到磁碟
@@ -39,7 +41,5 @@ const storage = multer.diskStorage({
   }
 });
 
-
 // 匯出 upload 物件
-const upload = multer({fileFilter, storage});
-module.exports = upload;
+module.exports = multer({fileFilter, storage});

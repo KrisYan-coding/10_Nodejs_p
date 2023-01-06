@@ -7,7 +7,9 @@ require('dotenv').config();
 // --dest: destination 上傳資料暫存的資料夾
 
 // ------[multer 複雜版(fileFilter / storage)]
-const upload = require('./modules/upload-img');
+let upload = require('./modules/upload-img');
+let uploadErr = require('./modules/upload-img-error');
+const uploadVdo = require('./modules/upload-vdo');
 
 // 1. require express
 // =====================================================================
@@ -146,6 +148,7 @@ app.get('/json-sales2', (req, res) => {
   res.render('json-sales2', {data, handleObj, orderby});
 });
 
+
 // ----------[query string]
 app.get('/try-qs', (req, res) => {
   console.log(req.query);
@@ -185,6 +188,7 @@ app.get('/try-post', (req, res) => {
   res.json(req.query);
 });
 
+
 // ----------[表單送給自己]
 // borwser url request: 回應表單
 app.get('/try-post-form', (req, res) => {
@@ -202,11 +206,79 @@ app.post('/try-post-form', (req, res) => {
 
 
 // ----------[multer]
+// 上傳單一檔案(image)(= 1)--
 app.post('/try-upload', upload.single('avatar'), (req, res) => {
-// --upload.single('avatar'): middleware ，上傳單一檔案 name: 'avatar'
+// --upload.single('avatar'): middleware ，上傳單一檔案，req.file = obj.fieldname: 'avatar'
   console.log('req.file', !req.file);
   let data = !req.file? '格式不符' : req.file;
   res.json(data);
+});
+
+// 上傳多個檔案(image)( >= 1)--
+app.post('/try-uploads', upload.array('photos'), (req, res) => {
+// --upload.array('photos'): middleware ，上傳多個檔案，req.files = array 裡面一個檔案一個 obj.fieldname: 'photos'
+  res.json(req.files);
+});
+
+// 上傳多個檔案(image)，丟錯誤(不需要)，middleware 也可以放在 callback function 裡面--
+app.post('/try-uploads-err', (req, res) => {
+  console.log('req.files', req.files);
+  uploadErr(req, res, function (err){
+    // console.log(err);
+    // if (err instanceof multer.MulterError){
+    //   res.json('1');
+    // } else if (err) {
+    //   res.json([2, req.files]);
+    //   console.log('req.files', req.files);
+    // } else {
+    //   res.json([3, req.files]);
+    // }
+    // --丟錯誤會讓全部的檔案無法上傳，如果只要抓出未上傳成功的檔案，不需要用到error
+
+    res.json([3, req.files]);
+
+  });
+});
+
+// 上傳多個檔案(video)( >= 1)--
+app.post('/try-uploads-vdo', uploadVdo.array('photos'), (req, res) => {
+  console.log('req.files', req.files);
+  res.json(req.files);
+});
+
+
+// ----------[url參數]
+app.get('/my-params1/:action?/:id', (req, res) => {
+// --參數最後加? -> 參數可以不輸入
+  console.log('req.params', req.params);
+  res.json(req.params);
+  // --參數值皆為字串
+});
+// --url沒加參數、參數不夠、參數太多 進不到這個路由 -> 加 ?
+
+
+// ----------[regular expression 設定路由路徑]
+app.get(/^\/hi\/?/, (req, res) => {
+// -> ('/hi' + '/' 0 或 1次) 開頭
+
+let result = {
+  url: req.url
+};
+result.split = req.url.split('/');
+res.json(result);
+});
+
+app.get(/\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
+// -> 結尾 i(不區分大小寫)
+// -> \/ 跳脫 '/'
+// -> \d{2} : 2個數字
+// -> -? : '-' 可有可無
+// -> ***$ : 以 *** 結尾，後面不能加東西，可以加 query string
+
+let tel = req.url.split('?')[0]; // query string 後面不要
+tel = tel.slice(3).split('-').join('');
+res.json(tel);
+// res.send({tel});
 });
 
 
@@ -215,10 +287,12 @@ app.post('/try-upload', upload.single('avatar'), (req, res) => {
 //   res.send(`<h2>假的a.html</h2>`);
 // });
 
+
 // ----------[public]
 // 建立可以訪問'piblic'資料夾中的靜態內容的路由--
 // 只能用 get
 app.use(express.static('public'));
+
 
 // ----------[最後一道防線]
 // ****所有路由要放在最後一道防線之前****
@@ -232,6 +306,7 @@ app.use((req, res) => {
   // --shorten--
   res.status(404).send(`<h2>找不到你要的頁面yo</h2>`);
 });
+
 
 // 4. server 監聽
 // =====================================================================

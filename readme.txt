@@ -48,9 +48,9 @@ process: node 內建物件
 
 // --------------------------[project]
 ***資料夾***
-public/static : 存放靜態內容
+public/static : 存放靜態內容(url可以直接訪問的)
 node_modules : 此專案所有用到的套件
-views : 存放樣板引擎
+views : 存放樣板引擎(要回應的)
 
 ***設定檔***
 .env : 環境變數(等號左右不要空白)
@@ -72,6 +72,8 @@ package.json "main": index.js 主程式 (nodemon 預設執行index.js)
     req.body : 取得 POST 表單資料
     req.file : 取的上傳的單一檔案
     req.files : 取的上傳的多個檔案
+    req.params : 網址列上的參數
+    req.url : domain 之後
 
 // --------------------------[前端 query string to obj]
 const usp = new URLSearchParams(location.search);
@@ -95,6 +97,22 @@ obj = {};
 obj.aaa?.bbb; -> 一層沒有就不要往下
 >>>'undefined'
 
+// --------------------------[RESTful 簡略的規則]
+  GET /product       -> 取得資料列表
+  GET /product/:pid  -> 取得單筆資料
+
+  POST /product      -> 新增資料
+  PUT /product/:pid  -> 修改資料
+  POST /product/:pid -> 刪除資料
+
 // --------------------------[others]
 1. 大專不要用 EJS，用 react
 2. browser 直接 query -> method: GET
+3. 瀏覽器可以撥放的影片格式: mp4(O) h264(O) h265(X)
+4. 圖片壓縮 jimp / sharp
+5. req.query vs. req.params(better SEO)
+
+
+// --------------------------[問題]
+1. 上傳多張圖片時，如果有一張格式不符，如何知道是哪一張?
+

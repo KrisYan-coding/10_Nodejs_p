@@ -18,6 +18,11 @@ const fileFilter = (req, file, cb) => {
 
   // 如果檔案副檔名有在 extMap 裡面才上傳
   const uploadFlag = !! extMap[file.mimetype];
+
+  // if (!uploadFlag){
+  //   console.log('error');
+  //   cb(new Error('HI'), false);
+  // }
   cb(null, uploadFlag);
 };
 
@@ -41,5 +46,5 @@ const storage = multer.diskStorage({
 
 
 // 匯出 upload 物件
-const upload = multer({fileFilter, storage});
-module.exports = upload;
+const uploadErr = multer({fileFilter, storage}).array('photos');
+module.exports = uploadErr;
