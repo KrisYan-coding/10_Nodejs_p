@@ -75,6 +75,7 @@ package.json "main": index.js 主程式 (nodemon 預設執行index.js)
     req.files : 取的上傳的多個檔案
     req.params : 網址列上的參數
     req.url : domain 之後
+    req.session : 使用 express-session
 
 // --------------------------[前端 query string to obj]
 const usp = new URLSearchParams(location.search);

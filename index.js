@@ -1,4 +1,8 @@
 /* eslint-disable quotes */
+// 0. require modules
+// =====================================================================
+
+// ------[使用 .env 的環境變數]
 require('dotenv').config();
 
 // ------[multer 簡單版(只設暫存路徑)]
@@ -10,6 +14,9 @@ require('dotenv').config();
 let upload = require('./modules/upload-img');
 let uploadErr = require('./modules/upload-img-error');
 const uploadVdo = require('./modules/upload-vdo');
+
+// ------[express-session]
+const session = require('express-session');
 
 // 1. require express
 // =====================================================================
@@ -28,6 +35,24 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({extended: false}));
 // body-parser for json data--
 app.use(express.json());
+
+// 設定 session middleware--
+app.use(session({
+  saveUninitialized: false, // session尚未初始化前是否要儲存
+  resave: false, // 沒有變更內容時是否要強制回存
+  secret: 'djnfjvjknfvjnienekkopjidkm', // 加密用的字串
+  cookie: {
+    maxAge: 1200_000, // cookie 存活時間，毫秒
+  }
+}));
+
+// 自訂 middleware--
+app.use((req, res, next) => {
+  console.log('自訂 middleware');
+
+  res.locals.title = 'Kris的店'; // 回傳資料 title，在 template 裡面的全域變數
+  next(); // 要加 next() 才可以往下進到路由，否則會卡住
+});
 
 
 // 3. 建立後端路由(routes)，有先後順序，路徑都要加'/'
@@ -51,6 +76,7 @@ app.get(['/', '/Home'], (req, res) => {
 
 // ----------[回應 json]
 app.get('/json-sales', (req, res) => {
+  console.log('res.locals', res.locals.title);
   const data = require(__dirname + '/data/sales.json');
   // --require json 檔，會自動做 JSON.parse() 轉換為原生類型
   // --若變更 json 檔內容，server要重新啟動(用nodemon每次存檔就會重新啟動)，才會重新require，前端才會更新
@@ -60,7 +86,7 @@ app.get('/json-sales', (req, res) => {
   // data 轉換為json字串，送給client，並設定 res Header/Content-Type: application/json
 
   const orderBy = req.query.orderBy || 'id';
-  console.log(orderBy);
+  // console.log(orderBy);
   let dataSorted = data.sort((a, b) => {
     return (a[orderBy] > b[orderBy]) ? 1 : -1;
   });
@@ -290,6 +316,18 @@ app.use(admin2);
 app.use('/admin', admin2);
 // => 掛在'/admin'下(baseUrl)，後面再加上 module router 的路由路徑(url)
 
+
+// ----------[使用 session]
+app.use('/try-sess', (req, res) => {
+  req.session.my_var = req.session.my_var || 0;
+  req.session.my_var ++;
+
+  res.json([
+    req.session.my_var,
+    req.session
+  ]);
+});
+
 // ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
 //   res.send(`<h2>假的a.html</h2>`);
@@ -303,7 +341,6 @@ app.use('/admin', admin2);
 // => 掛在'/'下，後面再加上檔案名稱
 // --shorten--
 app.use(express.static('public'));
-
 
 
 // ----------[最後一道防線]

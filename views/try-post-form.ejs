@@ -12,7 +12,7 @@
                     <label for="account" class="form-label">account</label>
                     <input type="text" class="form-control" id="account" name="account">
                     <div class="form-text"><%= (typeof account === 'undefined') ? '' : account %> </div>
-                    <!-- GET拿表單的時候沒有data，用 typeof 判斷變數是否存在(不會error) -->
+                    <!-- GET拿表單的時候還沒有data，用 typeof 判斷變數是否存在(不會error) -->
                     <!-- <div class="form-text"><%# account %> </div> -->
                     <!-- 法2: 在index預設 GET的回傳資料{account: '', password: ''} -->
                 </div>
