@@ -2,8 +2,21 @@
 // 0. require modules
 // =====================================================================
 
-// ------[使用 .env 的環境變數]
-require('dotenv').config();
+// ------[使用 .env(預設) 的環境變數]
+// require('dotenv').config();
+
+// ------[依照 cmd 指令，絕定使用 dev.env/prod.env 的環境變數]
+if (process.argv[2] === 'production'){
+  // --npm start -> nodemon index.js production
+  //                   0       1        2
+  require('dotenv').config({
+    path: __dirname + '/prod.env'
+  });
+} else {
+  require('dotenv').config({
+    path: __dirname + '/dev.env'
+  });
+}
 
 // ------[multer 簡單版(只設暫存路徑)]
 // const multer = require('multer');
@@ -56,7 +69,8 @@ app.use(session({
 app.use((req, res, next) => {
   console.log('自訂 middleware');
 
-  res.locals.title = 'Kris的店'; // 回傳資料 title，在 template 裡面的全域變數
+  res.locals.title = process.env.SITE_TITLE || '***沒有設定***'; 
+  // --回傳資料 title，在 template 裡面的全域變數
   next(); // 要加 next() 才可以往下進到路由，否則會卡住
 });
 
