@@ -25,6 +25,9 @@
 
 
   <script>
+    const cate1Val = '2';
+    const cate2Val = '16';
+
     let data = [
       { sid: "1", name: "程式設計", parent_sid: "0" },
       { sid: "2", name: "繪圖軟體", parent_sid: "0" },
@@ -48,6 +51,10 @@
     // }
     $('#cate1').append(level1.map(el => `<option value="${el.sid}">${el.name}</option>`).join(''));
 
+    $('#cate1').val(cate1Val);
+    defineLevel2();
+    $('#cate2').val(cate2Val);
+
     function defineLevel2() {
       const cate1 = $('#cate1').val();
       let level2 = data.filter(el => {
@@ -64,7 +71,6 @@
 
     $('#cate1').on('change', defineLevel2);
 
-    window.onload = defineLevel2();
 
 
   </script>
