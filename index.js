@@ -18,6 +18,9 @@ const uploadVdo = require('./modules/upload-vdo');
 // ------[express-session]
 const session = require('express-session');
 
+// ------[moment-timezone]
+const moment = require('moment-timezone');
+
 // 1. require express
 // =====================================================================
 const express = require('express');
@@ -318,7 +321,7 @@ app.use('/admin', admin2);
 
 
 // ----------[使用 session]
-app.use('/try-sess', (req, res) => {
+app.get('/try-sess', (req, res) => {
   req.session.my_var = req.session.my_var || 0;
   req.session.my_var ++;
 
@@ -328,7 +331,7 @@ app.use('/try-sess', (req, res) => {
   ]);
 });
 // ----------[刪除 session]
-app.use('/delete-sess', (req, res) => {
+app.get('/delete-sess', (req, res) => {
   if (req.session.my_var !== undefined){
     console.log('111');
     delete req.session.my_var;
@@ -337,6 +340,26 @@ app.use('/delete-sess', (req, res) => {
     console.log('222');
     res.json('no-session');
   }
+
+});
+
+
+// ----------[moment]
+app.get('/try-moment', (req, res) => {
+  const m1 = moment(); // moment物件，類似 new Date() //當下標準時間
+  const d1 = new Date(); //當下標準時間
+
+  const m1a = m1.format('YYYY-MM-DD HH:mm:ss'); // 當下目前時區時間
+  const m1b = m1.tz('Asia/Tokyo').format('YYYY-MM-DD HH:mm:ss'); // 當下其他時區時間
+  const m2 = moment([2020, 1, 7]).fromNow(); // 距離現在多久時間
+  const m3 = moment("12-25-1995 09:00:00", "MM-DD-YYYY hh:mm:ss"); // 解析目前時區時間字串，轉為標準時間
+  const m4 = moment('2025-1-1 08:00:00'); //輸入目前時區時間，轉為標準時間
+  const m5 = moment("2023-01-07 12:55:24", "YYYY-MM-DD hh:mm:ss"); // 解析目前時區時間字串，轉為標準時間
+  const m7 = moment("2010-01-01T05:06:07", moment.ISO_8601);
+  const m8 = moment("2010-01-01T05:06:07Z", moment.ISO_8601);
+
+
+  res.json({m1, d1, m1a, m1b, m2, m3, m4, m5, m7, m8});
 
 });
 

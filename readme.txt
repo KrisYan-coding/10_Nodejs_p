@@ -48,16 +48,17 @@ process: node 內建物件
 
 // --------------------------[project]
 ***資料夾***
-public/static : 存放靜態內容(url可以直接訪問的)
-node_modules : 此專案所有用到的套件
-views : 存放樣板引擎(要回應的)
-routes : 存放路由模組 (將路另外設定在其他檔案，在 index.js 中再 require 進來)
+    public/static : 存放靜態內容(url可以直接訪問的)
+    node_modules : 此專案所有用到的套件
+    node_modules/bin : 可以在此專案的 cmd 用 npx 'filename' 使用套件的功能
+    views : 存放樣板引擎(要回應的)
+    routes : 存放路由模組 (將路另外設定在其他檔案，在 index.js 中再 require 進來)
 
 ***設定檔***
-.env : 環境變數(等號左右不要空白)
-package.json "dependencies" : 此專案安裝那些套件
-package-lock.json 展開所有此專案用到的套件(包含依賴的套件)
-package.json "main": index.js 主程式 (nodemon 預設執行index.js)
+    .env : 環境變數(等號左右不要空白)
+    package.json "dependencies" : 此專案安裝那些套件
+    package-lock.json 展開所有此專案用到的套件(包含依賴的套件)
+    package.json "main": index.js 主程式 (nodemon 預設執行index.js)
 
 
 // --------------------------[輸入輸出]
