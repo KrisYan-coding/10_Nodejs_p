@@ -115,6 +115,7 @@ obj.aaa?.bbb; -> 一層沒有就不要往下
 4. 圖片壓縮 jimp / sharp
 5. req.query vs. req.params(better SEO)
 6. domain 不一樣不能存取 cookie/session，驗證需透過 JWT 處理
+7. Connection pools: (6)34:00
 
 
 // --------------------------[問題]

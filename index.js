@@ -21,6 +21,9 @@ const session = require('express-session');
 // ------[moment-timezone]
 const moment = require('moment-timezone');
 
+// ------[database]
+const db = require('./modules/connect-mysql');
+
 // 1. require express
 // =====================================================================
 const express = require('express');
@@ -358,10 +361,21 @@ app.get('/try-moment', (req, res) => {
   const m7 = moment("2010-01-01T05:06:07", moment.ISO_8601);
   const m8 = moment("2010-01-01T05:06:07Z", moment.ISO_8601);
 
-
   res.json({m1, d1, m1a, m1b, m2, m3, m4, m5, m7, m8});
-
 });
+
+
+// ----------[查詢資料庫 : 要使用非同步]
+app.get('/try-db', async (req, res) => {
+  // const [rows, fields] = await db.query("SELECT * FROM categories");
+  // db.query(sql) 回傳 [results(query 的資料 obj in array), fields(資料表欄位資料)]
+  // fields 用不到，解構第一個就好
+  const [rows] = await db.query("SELECT * FROM categories");
+
+  res.json({rows});
+});
+
+
 
 // ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
