@@ -327,6 +327,18 @@ app.use('/try-sess', (req, res) => {
     req.session
   ]);
 });
+// ----------[刪除 session]
+app.use('/delete-sess', (req, res) => {
+  if (req.session.my_var !== undefined){
+    console.log('111');
+    delete req.session.my_var;
+    res.json(req.session);
+  } else {
+    console.log('222');
+    res.json('no-session');
+  }
+
+});
 
 // ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
