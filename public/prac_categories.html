@@ -46,11 +46,12 @@
     // for (let el of level1) {
     //   $('#cate1').append(`<option value="${el.sid}">${el.name}</option>`);
     // }
-    $('#cate1').append(level1.map( el => `<option value="${el.sid}">${el.name}</option>`).join(''));
+    $('#cate1').append(level1.map(el => `<option value="${el.sid}">${el.name}</option>`).join(''));
 
     function defineLevel2() {
+      const cate1 = $('#cate1').val();
       let level2 = data.filter(el => {
-        return el.parent_sid === $('#cate1').val();
+        return el.parent_sid === cate1;
       })
       // console.log(level2);
 
