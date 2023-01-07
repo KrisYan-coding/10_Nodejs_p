@@ -3,12 +3,13 @@ const db = require(__dirname + '/../modules/connect-mysql');
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+const getListDate = async (req, res) => {
+
   let page = +req.query.page || 1; 
   // -- + 字串轉數值 -> +"1" = 1, +"1.5" = 1.5, +"aaa" = NaN, +undefined = NaN 
 
   if (page < 1){
-    return res.redirect(req.baseUrl);
+    return res.redirect(req.baseUrl + req.url);
     // --add return to end the function 
   }
   
@@ -33,9 +34,19 @@ router.get('/', async (req, res) => {
     [rows] = await db.query(sql);
   }
 
-  res.render('ab-list', {totalRows, totalPages, page, rows});
+  return {totalRows, totalPages, page, rows}; 
+};
 
+// 拿到資料列表頁面--
+router.get('/', async (req, res) => {
+  const output = await getListDate(req, res);
+  res.render('ab-list', output);
+});
 
+// 拿到資料--
+router.get('/api', async (req, res) => {
+  const output = await getListDate(req, res);
+  res.json(output);
 });
 
 module.exports = router;
