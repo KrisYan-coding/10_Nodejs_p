@@ -12,7 +12,7 @@
               <li class="page-item"><a class="page-link" href="#">Previous</a></li>
               <% for(let i = page -5; i <= page + 5; i++){
                   if (i>0 && i<=totalPages){ %> 
-                    <li class="page-item"><a class="page-link" href="?page=<%= i %>"><%= i %> </a></li>
+                    <li class="page-item <%= (i===page)? 'active' : ''%>"><a class="page-link" href="?page=<%= i %>"><%= i %> </a></li>
                   <% } %> 
               <% } %> 
               <li class="page-item"><a class="page-link" href="#">Next</a></li>
@@ -40,7 +40,8 @@
                   <td><%= r.name %> </td>
                   <td><%= r.email %> </td>
                   <td><%= r.mobile %> </td>
-                  <td><%= r.birthday %> </td>
+                  <td><%= locals.toDateString(r.birthday) %> </td> 
+                  <%# locals.toDateString = toDateString 樣板輔助函式 %> 
                   <td><%= r.address %> </td>
                 </tr>
               <% } %> 

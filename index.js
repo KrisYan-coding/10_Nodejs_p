@@ -71,6 +71,11 @@ app.use((req, res, next) => {
 
   res.locals.title = process.env.SITE_TITLE || '***沒有設定***'; 
   // --回傳資料 title，在 template 裡面的全域變數
+
+  // 樣板輔助函式, helper functions
+  res.locals.toDateString = d => moment(d).format('YYYY-MM-DD');
+  res.locals.toDatetimeString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
+  
   next(); // 要加 next() 才可以往下進到路由，否則會卡住
 });
 
