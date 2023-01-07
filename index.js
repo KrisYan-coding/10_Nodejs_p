@@ -391,7 +391,7 @@ app.get('/try-db', async (req, res) => {
 
 
 // ----------[使用 module route: address-book]
-app.use('/address-book', require(__dirname + '/routes/address-book'));
+app.use('/address-book/list', require(__dirname + '/routes/address-book'));
 
 // ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
