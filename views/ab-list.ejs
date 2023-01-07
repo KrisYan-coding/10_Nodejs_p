@@ -1,0 +1,55 @@
+<%- include('parts/html-head') %>
+  <!-- --要用ejsesc (不要跳脫 html) -->
+  <!-- --路徑開頭不要'/', .ejs 可以省略-->
+  <%- include('parts/navbar') %>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <nav aria-label="Page navigation example">
+            <ul class="pagination">
+              <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+              <% for(let i = page -5; i <= page + 5; i++){
+                  if (i>0 && i<=totalPages){ %> 
+                    <li class="page-item"><a class="page-link" href="?page=<%= i %>"><%= i %> </a></li>
+                  <% } %> 
+              <% } %> 
+              <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">姓名</th>
+                <th scope="col">信箱</th>
+                <th scope="col">手機</th>
+                <th scope="col">生日</th>
+                <th scope="col">地址</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(let r of rows){ %> 
+                <tr>
+                  <td><%= r.sid %> </td>
+                  <td><%= r.name %> </td>
+                  <td><%= r.email %> </td>
+                  <td><%= r.mobile %> </td>
+                  <td><%= r.birthday %> </td>
+                  <td><%= r.address %> </td>
+                </tr>
+              <% } %> 
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <%- include('parts/scripts') %>
+      <%- include('parts/html-foot') %>

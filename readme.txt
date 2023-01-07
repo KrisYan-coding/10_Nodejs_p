@@ -68,6 +68,7 @@ process: node 內建物件
     res.send() : node express；自動判斷 Content-Type
     res.render() : node express 呈現樣板
     res.json() : Content-Type: applocation/json
+    res.redirect() : 頁面轉向
 
 ***client 輸入的資訊***
     req.query : 取得 GET query string parameters
