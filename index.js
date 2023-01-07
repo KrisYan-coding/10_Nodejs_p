@@ -282,6 +282,14 @@ res.json(tel);
 });
 
 
+// ----------[require router module in 'routes']
+const admin2 = require(__dirname + '/routes/admin2');
+app.use(admin2);
+// => app.use('/', admin2); 不加路由路徑，預設掛在'/'下(baseUrl)，後面再加上 module router 的路由路徑(url)
+
+app.use('/admin', admin2);
+// => 掛在'/admin'下(baseUrl)，後面再加上 module router 的路由路徑(url)
+
 // ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
 //   res.send(`<h2>假的a.html</h2>`);
@@ -291,7 +299,11 @@ res.json(tel);
 // ----------[public]
 // 建立可以訪問'piblic'資料夾中的靜態內容的路由--
 // 只能用 get
+// app.use('/', express.static('public'));
+// => 掛在'/'下，後面再加上檔案名稱
+// --shorten--
 app.use(express.static('public'));
+
 
 
 // ----------[最後一道防線]

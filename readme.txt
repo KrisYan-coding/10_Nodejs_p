@@ -51,6 +51,7 @@ process: node 內建物件
 public/static : 存放靜態內容(url可以直接訪問的)
 node_modules : 此專案所有用到的套件
 views : 存放樣板引擎(要回應的)
+routes : 存放路由模組 (將路另外設定在其他檔案，在 index.js 中再 require 進來)
 
 ***設定檔***
 .env : 環境變數(等號左右不要空白)
