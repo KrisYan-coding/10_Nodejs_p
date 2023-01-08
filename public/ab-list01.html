@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>開發環境 </title>
+
+  <!-- BS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- fontawesome (不用 CDN 的方式，路徑不要加 . )-->
+  <link rel="stylesheet" href="/fontawesome/css/all.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item active"><a class="page-link" href="?page=1">
+                1
+              </a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">姓名</th>
+              <th scope="col">信箱</th>
+              <th scope="col">手機</th>
+              <th scope="col">生日</th>
+              <th scope="col">地址</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- /////// -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let myData; // 全域變數
+
+    const renderTable = () => {
+      const ar = myData.rows.map(el => `
+        <tr>
+          <td>${el.sid}</td>
+          <td>${el.name}</td>
+          <td>${el.email}</td>
+          <td>${el.mobile}</td>
+          <td>${el.birthday}</td>
+          <td>${el.address}</td>
+        </tr>`
+      );
+
+      document.querySelector('tbody').innerHTML = ar.join('');
+    }
+
+    // 不送資料，請求回應資料--
+    fetch('/address-book/api')
+      .then(r => r.json())
+      .then(data => {
+        myData = data; // 將區域變數設定給全域變數，可以在全域拿到區域的值
+        console.log(myData);
+
+        renderTable();
+      })
+  </script>
+
+</body>
+
+</html>
