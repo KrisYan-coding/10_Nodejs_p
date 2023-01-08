@@ -45,8 +45,22 @@ router.get('/', async (req, res) => {
 
 // 拿到資料--
 router.get('/api', async (req, res) => {
-  const output = await getListDate(req, res);
+  let output = await getListDate(req, res);
+  // for(let item of output.rows){
+  //   // item.birthday2 = res.locals.toDateString(item.birthday);
+  //   // --直接設定另一個屬性 birthday2 給 item
+  //   item.birthday = res.locals.toDateString(item.birthday);
+  //   // --直接覆蓋 item 原有的 birthday 屬性
+  // }
+
+  output.rows = output.rows.map(el => {
+    el.birthday = res.locals.toDateString(el.birthday);
+    // --因在 top-level middleware 有將 toDateString() 設定為 res 屬性，所以可以直接呼叫 res.locals.toDateString()
+    return el;
+  });
+  
   res.json(output);
 });
 
+// 匯出 route--
 module.exports = router;

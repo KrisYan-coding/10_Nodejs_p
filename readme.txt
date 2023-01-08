@@ -122,3 +122,18 @@ obj.aaa?.bbb; -> 一層沒有就不要往下
 // --------------------------[問題]
 1. 上傳多張圖片時，如果有一張格式不符，如何知道是哪一張?
 
+// --------------------------[for of 直接改變 array element]
+// array 第一層 不能改變--
+a = [1, 2, 3]
+for(let item of a){item = item +1}
+>>> a = [1, 2, 3]
+
+// array 第一層後 可以改變--
+  a = [{age: 10}, {age: 20}, {age: 30}]
+  for (let item of a){ item.age = 100 }
+  >>> a = [{age: 100}, {age: 100}, {age: 100}]
+
+  a = [['age', 10], ['age', 20], ['age', 30]]
+  for(let item of a){item[0] = 'name'}
+  >>> a = [['name', 10], ['name', 20], ['name', 30]]
+

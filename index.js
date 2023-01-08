@@ -5,7 +5,7 @@
 // ------[使用 .env(預設) 的環境變數]
 // require('dotenv').config();
 
-// ------[依照 cmd 指令，絕定使用 dev.env/prod.env 的環境變數]
+// ------[依照 cmd 指令，決定使用 dev.env 或 prod.env 的環境變數]
 if (process.argv[2] === 'production'){
   // --npm start -> nodemon index.js production
   //                   0       1        2
@@ -397,6 +397,7 @@ app.get('/try-db', async (req, res) => {
 
 // ----------[使用 module route: address-book]
 app.use('/address-book', require(__dirname + '/routes/address-book'));
+// --require the exported route
 
 // ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
