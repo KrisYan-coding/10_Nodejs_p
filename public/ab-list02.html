@@ -17,16 +17,8 @@
 <body>
   <div class="container">
     <div class="row">
-      <div class="col">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination">
-            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-            <li class="page-item active"><a class="page-link" href="?page=1">
-                1
-              </a></li>
-            <li class="page-item"><a class="page-link" href="#">Next</a></li>
-          </ul>
-        </nav>
+      <div class="col paginationConteiner">
+
       </div>
     </div>
     <div class="row">
@@ -40,8 +32,39 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    const renderTable = (rows) => {
+    const renderPagination = (data) => {
+      return `
+      <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            ${
+              // Array(11).fill(1) // 最多 11 個
+              //   .map((el, id) => id -5 + data.page )
+              //   .filter(el => el >0 && el <= data.totalPages)
+              //   .map(el => `
+              //     <li class="page-item ${ (el === data.page)? 'active' : '' }">
+              //     <a class="page-link" href="?page=${el}">
+              //       ${el}
+              //     </a></li>`
+              //   )
+              //   .join('')
+              Array(11).fill(1).map((v, i) => {
+                const p = data.page -5 + i;
+                if (p < 1 || p > data.totalPages) return '';
 
+                return `
+                <li class="page-item ${ (p === data.page)? 'active' : '' }">
+                    <a class="page-link" href="?page=${p}">
+                      ${p}
+                    </a></li>`
+              }).join('')
+            }
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>`;
+    }
+    
+    const renderTable = (rows) => {
       return `
         <table class="table table-striped table-bordered">
           <thead>
@@ -70,10 +93,12 @@
     }
 
     // 不送資料，請求回應資料--
-    fetch('/address-book/api')
+    fetch('/address-book/api?page=11')
       .then(r => r.json())
       .then(data => {
+        console.log(data);
         document.querySelector('.tableContainer').innerHTML = renderTable(data.rows);
+        document.querySelector('.paginationConteiner').innerHTML = renderPagination(data);
       })
   </script>
 
