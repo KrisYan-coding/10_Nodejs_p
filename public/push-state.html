@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button onclick="testPushState()">Test</button>
+
+  <script>
+    function testPushState(){
+      history.pushState({name: 'bill'}, null, '/test1/test2');
+      // --argv -first: state；-second: unused；-third: url
+      // --url 不能更改現有的 domain name，避免釣魚網站的機制
+      // --把 url 加到 history 陣列(可以重複加)，並改變 url 為這個 url
+      // --僅改變 url，不會發出 req 到後端
+      // --若在網址列 get 這個 url 會找不到路由，因為後端沒有設定此路由
+    }
+
+    window.addEventListener('popstate', (event) => {
+      console.log(event.state);
+    })
+    // --url 改變事件: 當頁面發生跳轉時觸發
+    // --history.pushState 的 argv-state 會儲存到這個 event 的 state 屬性(event.state)
+    // --history.pushState()/history.replaceState() 不會觸發 popstate 事件，只有呼叫 history.back()/history.forward() 時才會觸發
+  </script>
+</body>
+</html>
