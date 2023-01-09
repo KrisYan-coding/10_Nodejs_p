@@ -141,3 +141,9 @@ for(let item of a){item = item +1}
   for(let item of a){item[0] = 'name'}
   >>> a = [['name', 10], ['name', 20], ['name', 30]]
 
+// --------------------------[CORS - 預防嵌站、釣魚網站]
+1. 瀏覽器不會知道 IP & domain 的關係，都會被視為字串
+2. 同一個檔案預設不可以拜訪不同的 server，server 會收到 req，也會回應 res，但瀏覽器預設會擋掉不同來源(server)的 resave
+ -> cors package 可以將回應的 res : "Access-Control-Allow-Origin": * 設為 * 表示接受任何 來自不同來源的檔案 來要資料
+3. postman 不是瀏覽器，不會有 CORS 機制
+

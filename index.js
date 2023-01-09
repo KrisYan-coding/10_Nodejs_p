@@ -45,17 +45,20 @@ const express = require('express');
 // =====================================================================
 const app = express();
 
-// 註冊樣板引擎 (預設為專案底層 views 資料夾，改資料夾要另外設定)--
+// ------[註冊樣板引擎 (預設為專案底層 views 資料夾，改資料夾要另外設定)]--
 app.set('view engine', 'ejs');
 // --app.set() : configure the behavior of the server
 
-// 建立 Top-level middleware (每個req都會經過 / 有順序的 / 當多個路由都需要此middleware時)***1
+// ------[建立 Top-level middleware (每個req都會經過 / 有順序的 / 當多個路由都需要此middleware時)]***1
 // body-parser for urlencoded data--
 app.use(express.urlencoded({extended: false}));
 // body-parser for json data--
 app.use(express.json());
 
-// 設定 session middleware--
+// ------[設定 cors]--
+app.use(require('cors')());
+
+// ------[設定 session middleware]--
 app.use(session({
   saveUninitialized: false, // session尚未初始化前是否要儲存
   resave: false, // 沒有變更內容時是否要強制回存
@@ -65,7 +68,7 @@ app.use(session({
   }
 }));
 
-// 自訂 middleware--
+// ------[自訂 middleware]--
 app.use((req, res, next) => {
   console.log('自訂 middleware');
 
