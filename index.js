@@ -31,11 +31,18 @@ const uploadVdo = require('./modules/upload-vdo');
 // ------[express-session]
 const session = require('express-session');
 
-// ------[moment-timezone]
-const moment = require('moment-timezone');
+// ------[express-mysql-session 要在 express-session require 後才 require，要將 session 參數傳入]
+const MysqlStore = require('express-mysql-session')(session);
+// --得到 class MysqlStore
 
 // ------[database]
 const db = require('./modules/connect-mysql');
+const sessionStore = new MysqlStore({}, db);
+// --argv -first: 連線資料庫的帳號密碼，如果已經有建立 db 連線就給{}； -second: 已建立的 db 連線
+
+// ------[moment-timezone]
+const moment = require('moment-timezone');
+
 
 // 1. require express
 // =====================================================================
@@ -63,6 +70,7 @@ app.use(session({
   saveUninitialized: false, // session尚未初始化前是否要儲存
   resave: false, // 沒有變更內容時是否要強制回存
   secret: 'djnfjvjknfvjnienekkopjidkm', // 加密用的字串
+  store: sessionStore, // session 要儲存到資料庫(session + db)，資料庫會自動生成一個 "sessions" 資料表
   cookie: {
     maxAge: 1200_000, // cookie 存活時間，毫秒
   }
@@ -350,10 +358,10 @@ app.get('/try-sess', (req, res) => {
   req.session.my_var = req.session.my_var || 0;
   req.session.my_var ++;
 
-  res.json([
-    req.session.my_var,
-    req.session
-  ]);
+  res.json({
+    "my_var": req.session.my_var,
+    "session": req.session
+  });
 });
 // ----------[刪除 session]
 app.get('/delete-sess', (req, res) => {
