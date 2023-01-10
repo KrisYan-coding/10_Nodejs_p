@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <pre id="info"></pre>
+
+  <script>
+    fetch('http://127.0.0.1:3001/try-sess', {
+      credentials: 'include'
+    })
+    // PDP 不一樣時 cookies 發不出去，不會在 req 擋頭裡面，要設定 credentials: 'include'
+    // -> 如果設定 credentials: 'include'，server res 的擋頭 "Access-Control-Allow-Origin" 就不能為 *
+    // --> 設定 cors config => 但還是無法在 PDP 不同的情況下送 cookie (portocol + domain 同 & port 不同 就可以)
+
+    .then(r => r.json())
+    .then(data => {
+      document.querySelector('#info').innerHTML = JSON.stringify(data, null, 4);
+    })
+  </script>
+</body>
+</html>

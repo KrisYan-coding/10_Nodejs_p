@@ -121,6 +121,7 @@ obj.aaa?.bbb; -> 一層沒有就不要往下
     .back() 上一頁
     .forward() 下一頁
     .pushState() 新增頁面
+9. PDP: protocol + domain + port
 
 
 // --------------------------[問題]

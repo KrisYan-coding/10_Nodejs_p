@@ -62,8 +62,20 @@ app.use(express.urlencoded({extended: false}));
 // body-parser for json data--
 app.use(express.json());
 
-// ------[設定 cors]--
-app.use(require('cors')());
+// ------[設定 cors middleware]--
+const corsOptions = {
+  credentials: true,  // res "Access-Control-Allow-Credentials: true"
+  origin: (origin, callback) => {
+    console.log({origin}); // origin: 從哪裡來拜訪的，會設定給 res "Access-Control-Allow-Origin: origin"
+    callback(null, true);
+    // --argv -first: error/null
+    // 沒有設白名單，沒有設條件，任何 PDP 來的 req 都可以接受
+  },
+};
+const cors = require('cors');
+app.use(cors(corsOptions));
+// --用 use 每一個 req 都會經過
+// --如果要緊設定給特定的 route ，就放在該 route 的第二個參數
 
 // ------[設定 session middleware]--
 app.use(session({
