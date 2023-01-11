@@ -37,14 +37,14 @@ const getListDate = async (req, res) => {
   return {totalRows, totalPages, page, rows}; 
 };
 
-// 呈現新增表單--
+// get : 呈現新增表單--
 router.get('/add', async (req, res) => {
   res.render('ab-add');
 });
 
-// 新增資料--
+// post : 新增資料 api--
 router.post('/add', async (req, res) => {
-  
+  res.json('add-api');
 });
 
 
