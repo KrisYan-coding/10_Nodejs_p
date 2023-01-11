@@ -122,6 +122,7 @@ obj.aaa?.bbb; -> 一層沒有就不要往下
     .forward() 下一頁
     .pushState() 新增頁面
 9. PDP: protocol + domain + port
+10. joi.dev 資料欄位驗證套件
 
 
 // --------------------------[問題]

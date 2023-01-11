@@ -121,5 +121,12 @@ router.post('/add', upload.none(), async (req, res) => {
 // });
 
 
+// --------------------[修改資料]
+router.get('/edit', (req, res) => {
+  const sid = req.query.sid;
+  res.json({sid});
+});
+
+
 // 匯出 route--
 module.exports = router;
