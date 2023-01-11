@@ -5,6 +5,16 @@ const moment = require('moment-timezone');
 
 const router = express.Router();
 
+// 設定 top-level middleware -> 只有掛在 /address-book 下的路由才會經過--
+// 當在 index 設定的 baseUrl: /address-book 改變時，template 中的連結可以一起變動 -> 將 baseUrl 作為參數傳到 template 中
+router.use((req, res, next) => {
+  const {url, baseUrl, originalUrl} = req;
+
+  res.locals = {...res.locals, url, baseUrl, originalUrl};
+
+  next();
+});
+
 const getListDate = async (req, res) => {
 
   let page = +req.query.page || 1; 

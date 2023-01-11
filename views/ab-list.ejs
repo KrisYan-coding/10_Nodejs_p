@@ -48,7 +48,7 @@
               <% for(let r of rows){ %>
                 <tr>
                   <td>
-                    <a href="">
+                    <a href="javascript: deleteItem(<%= r.sid %>)">
                       <i class="fa-solid fa-trash"></i>
                     </a>
                   </td>
@@ -74,7 +74,7 @@
                       <%= r.address %>
                     </td>
                     <td>
-                      <a href="/address-book/edit?sid=<%= r.sid %> ">
+                      <a href="<%= baseUrl %>/edit?sid=<%= r.sid %> ">
                         <i class="fa-solid fa-pen"></i>
                       </a>
                     </td>
@@ -86,6 +86,25 @@
       </div>
     </div>
 
+<%- include('parts/scripts') %>
+<script>
+  // 用 delete 方法發送 req 來刪除資料--
+  function deleteItem(sid){
+    if (! confirm(`是否要刪除編號為 ${sid} 的資料?`)){
+      return;
+    }
+    
+    fetch(`<%= baseUrl %>/${sid}`, {
+      method: 'DELETE'
+    })
+    .then(r=>r.json())
+    .then(data => {
+      console.log(data);
+      if(data.success){
+        location.reload(); // 重整頁面
+      }
+    })
+  }
+</script>
 
-    <%- include('parts/scripts') %>
-      <%- include('parts/html-foot') %>
+<%- include('parts/html-foot') %>
