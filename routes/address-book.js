@@ -122,11 +122,32 @@ router.post('/add', upload.none(), async (req, res) => {
 
 
 // --------------------[修改資料]
-router.get('/edit', (req, res) => {
-  const sid = req.query.sid;
-  res.json({sid});
-});
+// router.get('/:sid', (req, res) => {
+//   const sid = req.query.sid;
+//   res.json({sid});
+// });
 
+// --------------------[刪除資料]
+router.delete('/:sid', async (req, res) => {
+  let output = {
+    success: false,
+    errors: ''
+  };
+
+  const sid = +req.params.sid || 0;
+  if (! sid){
+    output.errors = 'no sid';
+    return res.json(output);
+  }
+
+  const sql = "DELETE FROM `address_book` WHERE sid=?";
+
+  const [result] = await db.query(sql, [sid]);
+
+  output.success = !!result.affectedRows;
+  
+  return res.json(output);
+});
 
 // 匯出 route--
 module.exports = router;
