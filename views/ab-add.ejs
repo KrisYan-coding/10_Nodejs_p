@@ -85,6 +85,17 @@
     .then(r => r.json())
     .then(obj => {
       console.log('obj', obj);
+      if (obj.success){
+        alert('新增成功');
+        location.href = '/address-book';
+      } else {
+        alert('新增失敗');
+        console.log('obj.errors', obj.errors);
+        for(let e in obj.errors){
+          console.log(obj.errors[e]);
+          document.querySelector(`#${e}`).nextElementSibling.innerHTML = obj.errors[e];
+        }
+      }
     })
 
 

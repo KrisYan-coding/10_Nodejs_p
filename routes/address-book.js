@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require(__dirname + '/../modules/connect-mysql');
 const upload = require('../modules/upload-img');
+const moment = require('moment-timezone');
 
 const router = express.Router();
 
@@ -38,52 +39,14 @@ const getListDate = async (req, res) => {
   return {totalRows, totalPages, page, rows}; 
 };
 
-// get : 呈現新增表單--
-router.get('/add', async (req, res) => {
-  res.render('ab-add');
-});
 
-// post : 新增資料 api(使用 upload.none() 解析 req.body)--
-router.post('/add', upload.none(), async (req, res) => {
-// --use upload.none() as middleware to handle a text-only miltipart form
-
-  let output = {
-    success: false,
-    postData: req.body,
-    code: 0,
-    errors: {},
-  };
-
-  const {name, email, mobile, birthday, address} = req.body;
-
-  // TODO: 資料檢查
-
-  const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
-  
-  const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
-  // --對應 ? 順序
-  output.result = result;
-  
-  res.json(output);
-});
-
-// post : 新增資料 api(使用 body-parser(已在 index.js 設定 top-level middleware) 解析 req.body)--
-// router.post('/add', async (req, res) => {
-// // --use upload.none() as middleware to handle a text-only miltipart form
-
-//   // TODO: 資料檢查
-
-//   res.json(req.body);
-// });
-
-
-// 拿到資料列表頁面--
+// --------------------[拿到資料列表頁面]
 router.get('/', async (req, res) => {
   const output = await getListDate(req, res);
   res.render('ab-list', output);
 });
 
-// 拿到資料--
+// --------------------[拿到資料]
 router.get('/api', async (req, res) => {
   let output = await getListDate(req, res);
   // for(let item of output.rows){
@@ -101,6 +64,62 @@ router.get('/api', async (req, res) => {
   
   res.json(output);
 });
+
+
+// --------------------[get : 呈現新增表單]
+router.get('/add', async (req, res) => {
+  res.render('ab-add');
+});
+
+// --------------------[post : 新增資料 api(使用 upload.none() 解析 req.body)]
+router.post('/add', upload.none(), async (req, res) => {
+// --use upload.none() as middleware to handle a text-only miltipart form
+
+  let output = {
+    success: false,
+    postData: req.body,
+    code: 0,
+    errors: {},
+  };
+
+  let {name, email, mobile, birthday, address} = req.body;
+
+  if (!name){
+    output.errors.name = '姓名為必填';
+    return res.json(output);
+  } 
+  if (name.length < 2) {
+    output.errors.name = '姓名長度不能小於 2';
+    return res.json(output);
+  }
+
+  birthday = (moment(birthday).isValid()) ? moment(birthday).format('YYYY-MM-DD') : null;
+  // if (! birthday){
+  //   output.errors[birthday] = ''
+  // }
+
+  // TODO: 資料檢查
+
+  const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
+  
+  const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
+  // --對應 ? 順序
+  output.result = result;
+  // --result.affectedRows
+  output.success = !!result.affectedRows;
+  
+  res.json(output);
+});
+
+// --------------------[post : 新增資料 api(使用 body-parser(已在 index.js 設定 top-level middleware) 解析 req.body)]
+// router.post('/add', async (req, res) => {
+// // --use upload.none() as middleware to handle a text-only miltipart form
+
+//   // TODO: 資料檢查
+
+//   res.json(req.body);
+// });
+
 
 // 匯出 route--
 module.exports = router;
