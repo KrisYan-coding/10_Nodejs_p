@@ -1,5 +1,6 @@
 const express = require('express');
 const db = require(__dirname + '/../modules/connect-mysql');
+const upload = require('../modules/upload-img');
 
 const router = express.Router();
 
@@ -43,8 +44,12 @@ router.get('/add', async (req, res) => {
 });
 
 // post : 新增資料 api--
-router.post('/add', async (req, res) => {
-  res.json('add-api');
+router.post('/add', upload.none(), async (req, res) => {
+// --use upload.none() as middleware to handle a text-only miltipart form
+
+  // TODO: 資料檢查
+  
+  res.json(req.body);
 });
 
 
