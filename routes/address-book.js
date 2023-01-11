@@ -37,6 +37,17 @@ const getListDate = async (req, res) => {
   return {totalRows, totalPages, page, rows}; 
 };
 
+// 呈現新增表單--
+router.get('/add', async (req, res) => {
+  res.render('ab-add');
+});
+
+// 新增資料--
+router.post('/add', async (req, res) => {
+  
+});
+
+
 // 拿到資料列表頁面--
 router.get('/', async (req, res) => {
   const output = await getListDate(req, res);

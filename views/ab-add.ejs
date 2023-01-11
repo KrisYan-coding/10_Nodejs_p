@@ -1,0 +1,49 @@
+<%- include('parts/html-head') %>
+  <!-- --要用ejsesc (不要跳脫 html) -->
+  <!-- --路徑開頭不要'/', .ejs 可以省略-->
+  <%- include('parts/navbar') %>
+
+
+    <div class="container">
+      <div class="row">
+        <div class="col-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">新增資料</h5>
+              <form>
+                <div class="mb-1">
+                  <label for="name" class="form-label">name</label>
+                  <input type="text" class="form-control" id="name" name="name">
+                  <div class="form-text">****</div>
+                </div>
+                <div class="mb-1">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" name="email">
+                  <div class="form-text">****</div>
+                </div>
+                <div class="mb-1">
+                  <label for="mobile" class="form-label">mobile</label>
+                  <input type="text" class="form-control" pattern="09\d{2}-?\d{3}-?\d{3}" id="mobile" name="mobile">
+                  <div class="form-text">****</div>
+                </div>
+                <div class="mb-1">
+                  <label for="birthday" class="form-label">birthday</label>
+                  <input type="date" class="form-control" id="birthday" name="birthday">
+                  <div class="form-text">****</div>
+                </div>
+                <div class="mb-1">
+                  <label for="address" class="form-label">address</label>
+                  <textarea cols="30" rows="3" class="form-control" id="address" name="address"></textarea>
+                  <div class="form-text">****</div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <%- include('parts/scripts') %>
+      <%- include('parts/html-foot') %>
