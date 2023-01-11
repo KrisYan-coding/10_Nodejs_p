@@ -76,6 +76,7 @@
     const fd = new FormData(form1);
     // --有形的表單資料(form1)，放到無形的表單(fd)
 
+    // meth 1 -----[用 multipart-form data 傳送]
     fetch('', {
     // 路徑用 '' : url 跟目前的一樣，但用 post 送
       method: 'post',
@@ -85,6 +86,41 @@
     .then(obj => {
       console.log('obj', obj);
     })
+
+
+    // meth 2 -----[用 urlencoded 傳送]
+    // const usp = new URLSearchParams(fd);
+
+    // fetch('', {
+    //   method: 'post',
+    //   body: usp.toString(),
+    //   headers: {
+    //     'Content-Type': 'application/x-www-form-urlencoded'
+    //   }
+    // })
+    // .then(r => r.json())
+    // .then(data => {
+    //   console.log('data', data);
+    // })
+
+
+    // meth 3 -----[用 json 傳送]
+    // const obj = {};
+    // for (let [k, v] of fd.entries()){
+    //   obj[k] = v;
+    // }
+
+    // fetch('', {
+    //   method: 'post',
+    //   body: JSON.stringify(obj),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    // .then(r=>r.json())
+    // .then(data => {
+    //   console.log('data', data);
+    // })
   }
 </script>
 <%- include('parts/html-foot') %>

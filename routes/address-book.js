@@ -43,14 +43,38 @@ router.get('/add', async (req, res) => {
   res.render('ab-add');
 });
 
-// post : 新增資料 api--
+// post : 新增資料 api(使用 upload.none() 解析 req.body)--
 router.post('/add', upload.none(), async (req, res) => {
 // --use upload.none() as middleware to handle a text-only miltipart form
 
+  let output = {
+    success: false,
+    postData: req.body,
+    code: 0,
+    errors: {},
+  };
+
+  const {name, email, mobile, birthday, address} = req.body;
+
   // TODO: 資料檢查
+
+  const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
   
-  res.json(req.body);
+  const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
+  // --對應 ? 順序
+  output.result = result;
+  
+  res.json(output);
 });
+
+// post : 新增資料 api(使用 body-parser(已在 index.js 設定 top-level middleware) 解析 req.body)--
+// router.post('/add', async (req, res) => {
+// // --use upload.none() as middleware to handle a text-only miltipart form
+
+//   // TODO: 資料檢查
+
+//   res.json(req.body);
+// });
 
 
 // 拿到資料列表頁面--
