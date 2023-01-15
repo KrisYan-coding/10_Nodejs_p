@@ -130,12 +130,77 @@ router.post('/add', upload.none(), async (req, res) => {
 //   res.json(req.body);
 // });
 
+// --------------------[get : 呈現修改表單]
+router.get('/edit/:sid', async (req, res) => {
+// --沒有加參數無法進到此路由
+  let output = {
+    errors: '',
+    note: ''
+  };
 
-// --------------------[修改資料]
-// router.get('/:sid', (req, res) => {
-//   const sid = req.query.sid;
-//   res.json({sid});
-// });
+  const sid = +req.params.sid || 0;
+  // --輸入無法轉為數字的 sid 則為 0
+
+  if (!sid){
+    output.errors = 'invalid sid';
+    // return res.json(output);
+    return res.redirect(req.baseUrl); // 轉向到 /address-book
+  }
+
+  const sql = "SELECT * FROM `address_book` WHERE sid=?";
+
+  const [rows] = await db.query(sql, [sid]);
+
+  // 輸入的 sid 查無資料--
+  if (rows.length < 1){
+    output.errors = 'no sid';
+    return res.redirect(req.baseUrl);
+  }
+
+  const row = rows[0];
+  
+  res.render('ab-edit', {row});
+});
+
+// --------------------[put : 修改資料 api(使用 upload.none() 解析 req.body)]
+router.put('/edit/:sid', upload.none(), async (req, res) => {
+  // --use upload.none() as middleware to handle a text-only miltipart form
+  
+    let output = {
+      success: false,
+      postData: req.body,
+      code: 0,
+      errors: {},
+    };
+  
+    let {name, email, mobile, birthday, address} = req.body;
+  
+    if (!name){
+      output.errors.name = '姓名為必填';
+      return res.json(output);
+    } 
+    if (name.length < 2) {
+      output.errors.name = '姓名長度不能小於 2';
+      return res.json(output);
+    }
+  
+    birthday = (moment(birthday).isValid()) ? moment(birthday).format('YYYY-MM-DD') : null;
+    // if (! birthday){
+    //   output.errors[birthday] = ''
+    // }
+  
+    // TODO: 資料檢查
+  
+    const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
+    
+    const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
+    // --對應 ? 順序
+    output.result = result;
+    // --result.affectedRows
+    output.success = !!result.affectedRows;
+    
+    res.json(output);
+  });
 
 // --------------------[刪除資料]
 router.delete('/:sid', async (req, res) => {

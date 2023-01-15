@@ -1,0 +1,140 @@
+<%- include('parts/html-head') %>
+<!-- --要用ejsesc (不要跳脫 html) -->
+<!-- --路徑開頭不要'/', .ejs 可以省略-->
+<%- include('parts/navbar') %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">修改資料</h5>
+          <form onsubmit="postForm(event)" name="form1">
+            <div class="mb-1">
+              <label for="name" class="form-label">name</label>
+              <input type="text" class="form-control" id="name" name="name" value="<%= row.name %> " />
+              <div class="form-text">****</div>
+            </div>
+            <div class="mb-1">
+              <label for="email" class="form-label">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"
+                value="<%= row.email %> "
+              />
+              <div class="form-text">****</div>
+            </div>
+            <div class="mb-1">
+              <label for="mobile" class="form-label">mobile</label>
+              <input
+                type="text"
+                class="form-control"
+                pattern="09\d{2}-?\d{3}-?\d{3}"
+                id="mobile"
+                name="mobile"
+                value="<%= row.mobile %> "
+              />
+              <div class="form-text">****</div>
+            </div>
+            <div class="mb-1">
+              <label for="birthday" class="form-label">birthday</label>
+              <input
+                type="date"
+                class="form-control"
+                id="birthday"
+                name="birthday"
+                value="<%= 2022-1-15 %> "
+              />
+              <div class="form-text">****</div>
+            </div>
+            <div class="mb-1">
+              <label for="address" class="form-label">address</label>
+              <textarea
+                cols="30"
+                rows="3"
+                class="form-control"
+                id="address"
+                name="address"
+              ><%= row.address %> </textarea>
+              <div class="form-text">****</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('parts/scripts') %>
+<script>
+  function postForm(e){
+    e.preventDefault();
+
+    // TODO: 資料檢查
+
+    let form1 = document.form1;
+    const fd = new FormData(form1);
+    // --有形的表單資料(form1)，放到無形的表單(fd)
+
+    // meth 1 -----[用 multipart-form data 傳送]
+    fetch('', {
+    // 路徑用 '' : url 跟目前的一樣，但用 post 送
+      method: 'post',
+      body: fd
+    })
+    .then(r => r.json())
+    .then(obj => {
+      console.log('obj', obj);
+      if (obj.success){
+        alert('新增成功');
+        // location.href = '/address-book';
+      } else {
+        alert('新增失敗');
+        console.log('obj.errors', obj.errors);
+        for(let e in obj.errors){
+          console.log(obj.errors[e]);
+          document.querySelector(`#${e}`).nextElementSibling.innerHTML = obj.errors[e];
+        }
+      }
+    })
+
+
+    // meth 2 -----[用 urlencoded 傳送]
+    // const usp = new URLSearchParams(fd);
+
+    // fetch('', {
+    //   method: 'post',
+    //   body: usp.toString(),
+    //   headers: {
+    //     'Content-Type': 'application/x-www-form-urlencoded'
+    //   }
+    // })
+    // .then(r => r.json())
+    // .then(data => {
+    //   console.log('data', data);
+    // })
+
+
+    // meth 3 -----[用 json 傳送]
+    // const obj = {};
+    // for (let [k, v] of fd.entries()){
+    //   obj[k] = v;
+    // }
+
+    // fetch('', {
+    //   method: 'post',
+    //   body: JSON.stringify(obj),
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    // .then(r=>r.json())
+    // .then(data => {
+    //   console.log('data', data);
+    // })
+  }
+</script>
+<%- include('parts/html-foot') %>

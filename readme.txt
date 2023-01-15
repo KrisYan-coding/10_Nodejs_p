@@ -59,6 +59,7 @@ process: node 內建物件
     package.json "dependencies" : 此專案安裝那些套件
     package-lock.json 展開所有此專案用到的套件(包含依賴的套件)
     package.json "main": index.js 主程式 (nodemon 預設執行index.js)
+    package.json "type": "module", : 此專案的 js 檔都是 ES module(import/export)，若沒有設定則為 Common JS(export/require)
 
 
 // --------------------------[輸入輸出]

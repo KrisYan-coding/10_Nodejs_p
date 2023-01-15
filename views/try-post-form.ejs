@@ -20,7 +20,7 @@
                     <label for="password" class="form-label">password</label>
                     <input type="text" class="form-control" id="password" name="password">
                     <div class="form-text"><%= locals.password ? password : '' %> </div>
-                    <!-- 法3: server 連同 template 回應的資料，會放在 locals 這個物件 -->
+                    <!-- 法3: server 連同 template 回應的資料，會放在 locals 這個物件，locals.可以省略 -->
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>

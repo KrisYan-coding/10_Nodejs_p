@@ -94,6 +94,7 @@ app.use((req, res, next) => {
 
   res.locals.title = process.env.SITE_TITLE || '***沒有設定***'; 
   // --回傳資料 title，在 template 裡面的全域變數
+  // --在 res.locals 新增自訂變數/函式，在樣板中可使用
 
   // 樣板輔助函式, helper functions
   res.locals.toDateString = d => moment(d).format('YYYY-MM-DD');
@@ -119,6 +120,7 @@ app.get(['/', '/Home'], (req, res) => {
   // --因為已註冊樣板引擎在 views，所以直接打檔名
   // --res.render() 呈現樣板 main 到前端，並給變數值
   // --template 檔名前面不要加 '/'
+  // --傳資料要包成物件
 });
 
 
