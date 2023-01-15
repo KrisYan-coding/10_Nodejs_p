@@ -276,6 +276,7 @@ app.get('/try-post-form', (req, res) => {
 // form submit: 回應有帶有資料的表單
 app.post('/try-post-form', (req, res) => {
   console.log('req.body', req.body);
+  // --req.body = {表單資料name: 表單資料value}
   res.render('try-post-form', req.body);
   // --在 template裡面用 locals 去拿到資料
 });

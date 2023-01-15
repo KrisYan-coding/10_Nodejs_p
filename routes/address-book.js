@@ -191,15 +191,17 @@ router.put('/edit/:sid', upload.none(), async (req, res) => {
   
     // TODO: 資料檢查
   
-    const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
+    // const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
     
-    const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
-    // --對應 ? 順序
-    output.result = result;
-    // --result.affectedRows
-    output.success = !!result.affectedRows;
+    // const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
+    // // --對應 ? 順序
+    // output.result = result;
+    // // --result.affectedRows
+    // output.success = !!result.affectedRows;
     
-    res.json(output);
+    // res.json(output);
+
+    res.json(req.body);
   });
 
 // --------------------[刪除資料]
