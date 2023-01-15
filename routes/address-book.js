@@ -21,9 +21,8 @@ const getListDate = async (req, res) => {
   let search = req.query.search || '';
   if (search){
     const sql_search = `%${search}%`;
-    console.log(sql_search);
-    where += ` AND \`name\` LIKE ` + db.escape(sql_search); // 避免輸入 ' 導致 SQL 錯誤(SQL injection)
-    console.log(where);
+    const esc_sql_search = db.escape(sql_search); // 跳脫 ' 避免導致 SQL 錯誤(避免 SQL injection)
+    where += ` AND (\`name\` LIKE ${esc_sql_search} OR \`mobile\` LIKE ${esc_sql_search})`;
     // --connection.escape(user_provided_data)
   }
 
@@ -36,7 +35,7 @@ const getListDate = async (req, res) => {
   }
   
   const perPage = 5;
-  const t_sql = "SELECT COUNT(1) totalRows FROM address_book";
+  const t_sql = `SELECT COUNT(1) totalRows FROM address_book ${where}`;
 
   // const [rows] = await db.query(t_sql);
   // const [totalRowsObj] = rows;
