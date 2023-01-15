@@ -158,8 +158,10 @@ router.get('/edit/:sid', async (req, res) => {
   }
 
   const row = rows[0];
+
+  const referer = req.get('Referer') || req.baseUrl; // 從哪個頁面到這個頁面的，(直接 url get/上一頁/下一頁 沒有 ；link 有；fetch 有)(when navigation occurs due to a link click or JavaScript-based navigation.)
   
-  res.render('ab-edit', {row});
+  res.render('ab-edit', {row, referer});
 });
 
 // --------------------[put : 修改資料 api(使用 upload.none() 解析 req.body)]
@@ -207,7 +209,7 @@ router.put('/edit/:sid', upload.none(), async (req, res) => {
   // --result.changedRows 修改列數
   // --同一筆資料，資料沒有變動 affectedRows=1 & changedRows=0
   // --同一筆資料，資料有變動 affectedRows=1 & changedRows=1
-  output.success = !!result.affectedRows;
+  output.success = !!result.changedRows;
   
   res.json(output);
 

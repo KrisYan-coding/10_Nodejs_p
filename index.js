@@ -66,7 +66,7 @@ app.use(express.json());
 const corsOptions = {
   credentials: true,  // res "Access-Control-Allow-Credentials: true"
   origin: (origin, callback) => {
-    console.log({origin}); // origin: 從哪裡來拜訪的，會設定給 res "Access-Control-Allow-Origin: origin"
+    console.log({origin}); // origin: 從哪裡來拜訪的(PD)，會設定給 res "Access-Control-Allow-Origin: origin"，發 fetch 才有
     callback(null, true);
     // --argv -first: error/null
     // 沒有設白名單，沒有設條件，任何 PDP 來的 req 都可以接受

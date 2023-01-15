@@ -79,6 +79,7 @@ process: node 內建物件
     req.params : 網址列上的參數
     req.url : domain 之後
     req.session : 使用 express-session
+    req.get(field) : req 的檔頭的 field 的值 (req.get('Content-Type'))
 
 // --------------------------[前端 query string to obj]
 const usp = new URLSearchParams(location.search);

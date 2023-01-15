@@ -63,6 +63,9 @@
             </div>
             <button type="submit" class="btn btn-primary">修改</button>
           </form>
+          <!-- <div class="info"></div> ###1 test referer-->
+          <!-- <div class="info"><%# locals.referer %> </div> -->
+          <!-- <div class="info"><%# locals._locals.baseUrl %> </div> -->
         </div>
       </div>
     </div>
@@ -71,6 +74,11 @@
 
 <%- include('parts/scripts') %>
 <script>
+  // document.querySelector('.info').innerHTML = document.referrer // ###1 test referer
+
+  // const locals = <%# JSON.stringify(locals) %>; // 定義後可以在 console 執行看到
+  const referer = <%- JSON.stringify(locals.referer) %>;
+
   function sendForm(e){
     e.preventDefault();
 
@@ -91,7 +99,8 @@
       console.log('obj', obj);
       if (obj.success){
         alert('修改成功');
-        // location.href = '/address-book';
+        // location.href = document.referrer;  // 使用 document.referrer
+        location.href = referer;  // 使用 req.get('Referer') : 要要在 router req.get('Referer') 拿到，再丟給 template
       } else {
         alert('修改失敗');
         console.log('obj.errors', obj.errors);
