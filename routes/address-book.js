@@ -166,42 +166,52 @@ router.get('/edit/:sid', async (req, res) => {
 router.put('/edit/:sid', upload.none(), async (req, res) => {
   // --use upload.none() as middleware to handle a text-only miltipart form
   
-    let output = {
-      success: false,
-      postData: req.body,
-      code: 0,
-      errors: {},
-    };
+  let output = {
+    success: false,
+    postData: req.body,
+    code: 0,
+    errors: {},
+  };
   
-    let {name, email, mobile, birthday, address} = req.body;
-  
-    if (!name){
-      output.errors.name = '姓名為必填';
-      return res.json(output);
-    } 
-    if (name.length < 2) {
-      output.errors.name = '姓名長度不能小於 2';
-      return res.json(output);
-    }
-  
-    birthday = (moment(birthday).isValid()) ? moment(birthday).format('YYYY-MM-DD') : null;
-    // if (! birthday){
-    //   output.errors[birthday] = ''
-    // }
-  
-    // TODO: 資料檢查
-  
-    // const sql = "INSERT INTO `address_book`(`name`, `email`, `mobile`, `birthday`, `address`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())";
-    
-    // const [result] = await db.query(sql, [name, email, mobile, birthday, address]);
-    // // --對應 ? 順序
-    // output.result = result;
-    // // --result.affectedRows
-    // output.success = !!result.affectedRows;
-    
-    // res.json(output);
+  const sid = +req.params.sid || 0;
 
-    res.json(req.body);
+  if (!sid){
+    output.errors.sid = 'invalid sid';
+    return res.json(output);
+  }
+
+  let {name, email, mobile, birthday, address} = req.body;
+
+  if (!name){
+    output.errors.name = '姓名為必填';
+    return res.json(output);
+  } 
+  if (name.length < 2) {
+    output.errors.name = '姓名長度不能小於 2';
+    return res.json(output);
+  }
+
+  birthday = (moment(birthday).isValid()) ? moment(birthday).format('YYYY-MM-DD') : null;
+  // if (! birthday){
+  //   output.errors[birthday] = ''
+  // }
+
+  // TODO: 資料檢查
+
+  const sql = "UPDATE `address_book` SET `name`=?,`email`=?,`mobile`=?,`birthday`=?,`address`=? WHERE sid=?";
+  
+  const [result] = await db.query(sql, [name, email, mobile, birthday, address, sid]);
+  // --對應 ? 順序
+  output.result = result;
+  // --result.affectedRows 影響列數
+  // --result.changedRows 修改列數
+  // --同一筆資料，資料沒有變動 affectedRows=1 & changedRows=0
+  // --同一筆資料，資料有變動 affectedRows=1 & changedRows=1
+  output.success = !!result.affectedRows;
+  
+  res.json(output);
+
+  // res.json(req.body);
   });
 
 // --------------------[刪除資料]
