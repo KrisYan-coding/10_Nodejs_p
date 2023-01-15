@@ -17,6 +17,16 @@ router.use((req, res, next) => {
 
 const getListDate = async (req, res) => {
 
+  let where = ' WHERE 1'; // SQL 語法前後留空白，串接時才不會錯誤
+  let search = req.query.search || '';
+  if (search){
+    const sql_search = `%${search}%`;
+    console.log(sql_search);
+    where += ` AND \`name\` LIKE ` + db.escape(sql_search); // 避免輸入 ' 導致 SQL 錯誤(SQL injection)
+    console.log(where);
+    // --connection.escape(user_provided_data)
+  }
+
   let page = +req.query.page || 1; 
   // -- + 字串轉數值 -> +"1" = 1, +"1.5" = 1.5, +"aaa" = NaN, +undefined = NaN 
 
@@ -42,7 +52,7 @@ const getListDate = async (req, res) => {
       return res.redirect('?page=' + totalPages);
     }
 
-    const sql = `SELECT * FROM address_book ORDER BY sid DESC LIMIT ${(page - 1)*perPage}, ${perPage}`;
+    const sql = `SELECT * FROM address_book ${where} ORDER BY sid DESC LIMIT ${(page - 1)*perPage}, ${perPage}`;
     [rows] = await db.query(sql);
   }
 
@@ -53,7 +63,7 @@ const getListDate = async (req, res) => {
 // --------------------[拿到資料列表頁面]
 router.get('/', async (req, res) => {
   const output = await getListDate(req, res);
-  res.render('ab-list', output);
+  res.render('ab-list', {...output});
 });
 
 // --------------------[拿到資料]
