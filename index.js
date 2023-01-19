@@ -102,6 +102,9 @@ app.use((req, res, next) => {
   // 樣板輔助函式, helper functions
   res.locals.toDateString = d => moment(d).format('YYYY-MM-DD');
   res.locals.toDatetimeString = d => moment(d).format('YYYY-MM-DD HH:mm:ss');
+
+  // 傳 req.session 給 template
+  res.locals.session = req.session;
   
   next(); // 要加 next() 才可以往下進到路由，否則會卡住
 });
@@ -428,7 +431,8 @@ app.get('/try-db', async (req, res) => {
 app.use('/address-book', require(__dirname + '/routes/address-book'));
 // --require the exported route
 
-// ----------[新增會員資料]
+
+// ----------[新增會員]
 app.get('/add-member', async (req, res) => {
   const sql = "INSERT INTO `members`(`email`, `password`, `hash`, `nickname`, `create_at`) VALUES (?, ?, '', 'nick', NOW())";
 
@@ -440,6 +444,60 @@ app.get('/add-member', async (req, res) => {
   ]);
 
   res.json(result);
+});
+
+// ----------[會員登入: 登入表單]
+app.get('/login', (req, res) => {
+  // return res.render('login', {req});
+  return res.render('login'); // 在 top-level middleware 將 req.session 設定給 res.locals
+});
+// ----------[會員登入: 登入api]
+app.post('/login', upload.none(), async (req, res) => {
+  const output = {
+    success: false,
+    data: req.body,
+    code: 0,
+    error: '',
+    note: ''
+  };
+
+  const {email, password} = req.body;
+  if (!email || !password){
+    output.error = '欄位資料不足';
+    output.code = 400;
+    return res.json(output);
+  }
+
+  const sql = "SELECT * FROM members WHERE email=?";
+  const [rows] = await db.query(sql, [email]);
+  // output.note = rows;
+  if (rows.length < 1){
+    output.error = '帳號錯誤';
+    output.code = 410;
+    return res.json(output);
+  }
+
+  const row = rows[0];
+  const passwordResult = await bcrypt.compare(password, row.password);
+  if (passwordResult){
+    output.success = true;
+    req.session.user = {
+      // email: email,
+      email,
+      nickname: row.nickname
+    };
+  } else {
+    output.error = '密碼錯誤';
+    output.code = 420;
+  }
+
+  return res.json(output);
+});
+
+// ----------[會員登出]
+app.get('/logout', async (req, res) => {
+  delete req.session.user;
+  return res.redirect('/');
 });
 
 // ----------[假的a.html]

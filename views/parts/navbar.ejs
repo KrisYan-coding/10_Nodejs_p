@@ -23,6 +23,27 @@
                                 <a class="nav-link" href="/address-book/add">ab-add</a>
                             </li>
                         </ul>
+                        <% if (locals.session && session.user) { %> 
+                            <ul class="navbar-nav mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link"><%= session.user.nickname %></a>
+                                    <!-- href: 路由路徑 -->
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/logout">登出</a>
+                                </li>
+                            </ul>
+                        <% } else { %> 
+                            <ul class="navbar-nav mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/login">登入</a>
+                                    <!-- href: 路由路徑 -->
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/register">註冊</a>
+                                </li>
+                            </ul>
+                        <% } %> 
                     </div>
                 </div>
             </nav>
