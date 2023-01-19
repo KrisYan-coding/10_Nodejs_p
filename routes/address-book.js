@@ -19,13 +19,26 @@ const getListDate = async (req, res) => {
 
   let where = ' WHERE 1'; // SQL 語法前後留空白，串接時才不會錯誤
   let search = req.query.search || '';
-
   // 如果有 query string : search 才要加 SQL 條件--
   if (search){
     const sql_search = `%${search}%`;
     const esc_sql_search = db.escape(sql_search); // 跳脫 ' 避免導致 SQL 錯誤(避免 SQL injection)
     where += ` AND (\`name\` LIKE ${esc_sql_search} OR \`mobile\` LIKE ${esc_sql_search})`;
     // --connection.escape(user_provided_data)
+  }
+
+  let order = ' ORDER BY sid DESC ';
+  let orderBy = req.query.orderBy || '';
+  switch(orderBy){
+    case 'sid_asc':
+      order = ' ORDER BY sid ASC ';
+      break;
+    case 'birthday_asc':
+      order = ' ORDER BY birthday ASC ';
+      break;
+    case 'birthday_desc':
+      order = ' ORDER BY birthday DESC ';
+      break;
   }
 
   let page = +req.query.page || 1; 
@@ -38,6 +51,7 @@ const getListDate = async (req, res) => {
   
   const perPage = 5;
   const t_sql = `SELECT COUNT(1) totalRows FROM address_book ${where}`;
+  // --order 跟 total rows 無關
 
   // const [rows] = await db.query(t_sql);
   // const [totalRowsObj] = rows;
@@ -53,7 +67,7 @@ const getListDate = async (req, res) => {
       return res.redirect('?page=' + totalPages);
     }
 
-    const sql = `SELECT * FROM address_book ${where} ORDER BY sid DESC LIMIT ${(page - 1)*perPage}, ${perPage}`;
+    const sql = `SELECT * FROM address_book ${where} ${order} LIMIT ${(page - 1)*perPage}, ${perPage}`;
     [rows] = await db.query(sql);
   }
 
