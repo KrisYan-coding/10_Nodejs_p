@@ -115,7 +115,12 @@
     document.formSearch.search.value = usp.get('search');
   }
   if (usp.get('orderBy')){
-    document.formOrderBy.orderBy.value = usp.get('orderBy');
+    let orderBy = usp.get('orderBy');
+    const orderByList = ['sid_desc', 'sid_asc', 'birthday_desc', 'birthday_asc'];
+    if (!orderByList.includes(orderBy)){
+      orderBy = 'sid_desc'
+    }
+    document.formOrderBy.orderBy.value = orderBy;
   }
 
   // pagination 用function ，處理 search query string 不見的問題--

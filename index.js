@@ -43,6 +43,9 @@ const sessionStore = new MysqlStore({}, db);
 // ------[moment-timezone]
 const moment = require('moment-timezone');
 
+// ------[bcrypt]
+const bcrypt = require('bcryptjs');
+
 
 // 1. require express
 // =====================================================================
@@ -424,6 +427,20 @@ app.get('/try-db', async (req, res) => {
 // ----------[使用 module route: address-book]
 app.use('/address-book', require(__dirname + '/routes/address-book'));
 // --require the exported route
+
+// ----------[新增會員資料]
+app.get('/add-member', async (req, res) => {
+  const sql = "INSERT INTO `members`(`email`, `password`, `hash`, `nickname`, `create_at`) VALUES (?, ?, '', 'nick', NOW())";
+
+  const password = await bcrypt.hash('12345', 8);
+
+  const [result] = await db.query(sql, [
+    'kris@test.com',
+    password
+  ]);
+
+  res.json(result);
+});
 
 // ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
