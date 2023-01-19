@@ -482,6 +482,7 @@ app.post('/login', upload.none(), async (req, res) => {
   if (passwordResult){
     output.success = true;
     req.session.user = {
+      id: row.id,
       // email: email,
       email,
       nickname: row.nickname
@@ -498,6 +499,16 @@ app.post('/login', upload.none(), async (req, res) => {
 app.get('/logout', async (req, res) => {
   delete req.session.user;
   return res.redirect('/');
+});
+
+// ----------[假登入]
+app.get('/fake-login', (req, res) => {
+  req.session.user = {
+    email: 'kkk@gmail.com',
+    nickname: '小君'
+  };
+
+  res.redirect('/');
 });
 
 // ----------[假的a.html]
