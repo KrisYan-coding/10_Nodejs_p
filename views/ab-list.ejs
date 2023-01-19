@@ -103,7 +103,7 @@
 
   // pagination 用function ，處理 search query string 不見的問題--
   function gotoPage(page){
-    usp.set('page', page);
+    usp.set('page', page); // 原有的search=*** 再加上 page=***
     location.href = '?' + usp.toString();
   }
   

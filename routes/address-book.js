@@ -19,6 +19,8 @@ const getListDate = async (req, res) => {
 
   let where = ' WHERE 1'; // SQL 語法前後留空白，串接時才不會錯誤
   let search = req.query.search || '';
+
+  // 如果有 query string : search 才要加 SQL 條件--
   if (search){
     const sql_search = `%${search}%`;
     const esc_sql_search = db.escape(sql_search); // 跳脫 ' 避免導致 SQL 錯誤(避免 SQL injection)
