@@ -45,6 +45,8 @@
 
     // TODO: 資料檢查
 
+    const lastPage = <%- JSON.stringify(locals.session.lastPage) %>;
+
     let form1 = document.form1;
     const fd = new FormData(form1);
     // --有形的表單資料(form1)，放到無形的表單(fd)
@@ -60,7 +62,8 @@
       console.log('obj', obj);
       if (obj.success){
         alert('登入成功');
-        location.href = '/';
+        console.log(lastPage); // /address-book/add
+        location.href = lastPage; // location.href 要用 originalUrl
       } else {
         alert('登入失敗');
         console.log('obj.errors', obj.errors);

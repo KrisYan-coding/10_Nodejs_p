@@ -306,7 +306,7 @@ app.post('/try-uploads', upload.array('photos'), (req, res) => {
 // 上傳多個檔案(image)，丟錯誤(不需要)，middleware 也可以放在 callback function 裡面--
 app.post('/try-uploads-err', (req, res) => {
   console.log('req.files', req.files);
-  uploadErr(req, res, function (err){
+  uploadErr(req, res, function (){
     // console.log(err);
     // if (err instanceof multer.MulterError){
     //   res.json('1');

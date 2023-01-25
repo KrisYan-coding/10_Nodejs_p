@@ -8,6 +8,13 @@ const router = express.Router();
 // 設定 top-level middleware -> 只有掛在 /address-book 下的路由才會經過--
 // 當在 index 設定的 baseUrl: /address-book 改變時，template 中的連結可以一起變動 -> 將 baseUrl 作為參數傳到 template 中
 router.use((req, res, next) => {
+
+  // 需要登入才能進到 /address-book 下的任何路由，也可以放在個別的路由--
+  if (! req.session.user){
+    req.session.lastPage = req.originalUrl; // 登入完成後可以在跳回原本想去的頁面
+    return res.redirect('/login'); // domain/login
+  }
+
   const {url, baseUrl, originalUrl} = req;
 
   res.locals = {...res.locals, url, baseUrl, originalUrl};
@@ -101,14 +108,15 @@ router.get('/api', async (req, res) => {
 });
 
 
-// --------------------[get : 呈現新增表單]
+// --------------------[get : 呈現新增表單，domain/address-book/add]
 router.get('/add', async (req, res) => {
   res.render('ab-add');
+
 });
 
 // --------------------[post : 新增資料 api(使用 upload.none() 解析 req.body)]
 router.post('/add', upload.none(), async (req, res) => {
-// --use upload.none() as middleware to handle a text-only miltipart form
+// --use upload.none() as middleware to handle a text-only miltipart-form data
 
   let output = {
     success: false,
