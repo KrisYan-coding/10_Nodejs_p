@@ -511,6 +511,8 @@ app.get('/fake-login', (req, res) => {
   res.redirect('/');
 });
 
+app.use('/products', require(__dirname + '/routes/products'));
+
 // ----------[假的a.html]
 // app.use('/a.html', (req, res) => {
 //   res.send(`<h2>假的a.html</h2>`);
