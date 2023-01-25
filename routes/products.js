@@ -21,10 +21,10 @@ router.get('/', async (req, res) => {
   let [rows] = await db.query(sql);
   // --rows = [{}, {}, ...]
 
-  rows = rows.map(el => {
-    el.publish_date = moment(el.publish_date).format('YYYY-MM-DD');
-    return el;
-  });
+  // rows = rows.map(el => {
+  //   el.publish_date = moment(el.publish_date).format('YYYY-MM-DD');
+  //   return el;
+  // });
 
   return res.json(rows);
 });

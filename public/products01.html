@@ -21,8 +21,14 @@
     </div>
   </div>
 
-
+  <!-- bootstrap CDN -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- dayjs CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+
+  <!-- moment CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 
   <script>
     let myData;
@@ -47,7 +53,7 @@
                   <td>${el.author}</td>
                   <td>${el.bookname}</td>
                   <td>${el.book_id}</td>
-                  <td>${el.publish_date}</td>
+                  <td>${dayjs(el.publish_date).format('YYYY-MM-DD')}</td>
                   <td>${el.price}</td>
                 </tr>`
             ).join('')}
