@@ -8,12 +8,12 @@ const router = express.Router();
 // 設定 top-level middleware -> 只有掛在 /address-book 下的路由才會經過--
 // 當在 index 設定的 baseUrl: /address-book 改變時，template 中的連結可以一起變動 -> 將 baseUrl 作為參數傳到 template 中
 router.use((req, res, next) => {
-
+  console.log(req.url);
   // 需要登入才能進到 /address-book 下的任何路由，也可以放在個別的路由--
-  if (! req.session.user){
-    req.session.lastPage = req.originalUrl; // 登入完成後可以在跳回原本想去的頁面
-    return res.redirect('/login'); // domain/login
-  }
+  // if (! req.session.user){
+  //   req.session.lastPage = req.originalUrl; // 登入完成後可以在跳回原本想去的頁面
+  //   return res.redirect('/login'); // domain/login
+  // }
 
   const {url, baseUrl, originalUrl} = req;
 
@@ -84,6 +84,11 @@ const getListDate = async (req, res) => {
 
 // --------------------[拿到資料列表頁面]
 router.get('/', async (req, res) => {
+
+  if (! req.session.user){
+    req.session.lastPage = req.originalUrl; // 登入完成後可以在跳回原本想去的頁面
+    return res.redirect('/login'); // domain/login
+  }
   const output = await getListDate(req, res);
   res.render('ab-list', {...output});
 });
@@ -110,6 +115,11 @@ router.get('/api', async (req, res) => {
 
 // --------------------[get : 呈現新增表單，domain/address-book/add]
 router.get('/add', async (req, res) => {
+
+  if (! req.session.user){
+    req.session.lastPage = req.originalUrl; // 登入完成後可以在跳回原本想去的頁面
+    return res.redirect('/login'); // domain/login
+  }
   res.render('ab-add');
 
 });
@@ -117,6 +127,11 @@ router.get('/add', async (req, res) => {
 // --------------------[post : 新增資料 api(使用 upload.none() 解析 req.body)]
 router.post('/add', upload.none(), async (req, res) => {
 // --use upload.none() as middleware to handle a text-only miltipart-form data
+
+  if (! req.session.user){
+    req.session.lastPage = req.originalUrl; // 登入完成後可以在跳回原本想去的頁面
+    return res.redirect('/login'); // domain/login
+  }
 
   let output = {
     success: false,
@@ -166,6 +181,12 @@ router.post('/add', upload.none(), async (req, res) => {
 // --------------------[get : 呈現修改表單]
 router.get('/edit/:sid', async (req, res) => {
 // --沒有加參數無法進到此路由
+
+  if (! req.session.user){
+    req.session.lastPage = req.originalUrl; // 登入完成後可以在跳回原本想去的頁面
+    return res.redirect('/login'); // domain/login
+  }
+
   let output = {
     errors: '',
     note: ''
@@ -200,6 +221,11 @@ router.get('/edit/:sid', async (req, res) => {
 // --------------------[put : 修改資料 api(使用 upload.none() 解析 req.body)]
 router.put('/edit/:sid', upload.none(), async (req, res) => {
   // --use upload.none() as middleware to handle a text-only miltipart form
+
+  if (! req.session.user){
+    req.session.lastPage = req.originalUrl; // 登入完成後可以在跳回原本想去的頁面
+    return res.redirect('/login'); // domain/login
+  }
   
   let output = {
     success: false,
@@ -251,6 +277,12 @@ router.put('/edit/:sid', upload.none(), async (req, res) => {
 
 // --------------------[刪除資料]
 router.delete('/:sid', async (req, res) => {
+
+  if (! req.session.user){
+    req.session.lastPage = req.originalUrl; // 登入完成後可以在跳回原本想去的頁面
+    return res.redirect('/login'); // domain/login
+  }
+  
   let output = {
     success: false,
     errors: ''

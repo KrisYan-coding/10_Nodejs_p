@@ -34,6 +34,8 @@
   <script>
     let myData;
 
+    const moment = require('moment-timezone');
+
     const gotoPage = (p) => {
       // 變換 url--
       history.pushState({}, null, `?page=${p}`);
