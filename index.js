@@ -78,7 +78,7 @@ const corsOptions = {
 const cors = require('cors');
 app.use(cors(corsOptions));
 // --用 use 每一個 req 都會經過
-// --如果要緊設定給特定的 route ，就放在該 route 的第二個參數
+// --如果要僅設定給特定的 route ，就放在該 route 的第二個參數
 
 // ------[設定 session middleware]--
 app.use(session({
@@ -93,7 +93,8 @@ app.use(session({
 
 // ------[自訂 middleware]--
 app.use((req, res, next) => {
-  console.log('自訂 middleware');
+  // console.log('自訂 middleware');
+  console.log(req.originalUrl);
 
   res.locals.title = process.env.SITE_TITLE || '***沒有設定***'; 
   // --回傳資料 title，在 template 裡面的全域變數

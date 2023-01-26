@@ -35,6 +35,7 @@ router.get('/toggle-like/:sid', async (req, res) => {
     success: false,
     params: req.params,
     error: '',
+    code: 0,
     action: '',
     note: ''
   };
@@ -43,8 +44,8 @@ router.get('/toggle-like/:sid', async (req, res) => {
   
   if (!req.session.user){
     output.error = '必須先登入會員，才能加到最愛';
-    req.session.lastPage = req.originalUrl;
-    return res.redirect('/login');
+    output.code = 100;
+    return res.json(output);
   }
 
   // 確認編號為 sid 的產品是否存在--
@@ -52,6 +53,7 @@ router.get('/toggle-like/:sid', async (req, res) => {
   const [rows] = await db.query(sql_check_sid, [sid]);
   if (rows.length < 1){
     output.error = '產品不存在';
+    output.code = 200;
     return res.json(output);
   }
   output.note = rows;
@@ -75,5 +77,18 @@ router.get('/toggle-like/:sid', async (req, res) => {
 
   res.json(output);
 });
+
+// ----------[會員登出]
+router.get('/logout', (req, res) => {
+  delete req.session.user;
+  return res.json('logout ok');
+});
+
+// ----------[跳轉至會員登入，再回到原頁面]
+router.get('/login', (req, res) => {
+  req.session.lastPage = req.headers.referer;
+  return res.redirect('/login');
+});
+
 
 module.exports = router;

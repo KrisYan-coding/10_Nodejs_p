@@ -39,6 +39,11 @@
 <body>
   <div class="container">
     <div class="row">
+      <div class="col">
+        <button onclick="sendLogout(event)">logout</button>
+      </div>
+    </div>
+    <div class="row">
       <div class="col tableContainer"></div>
     </div>
   </div>
@@ -75,7 +80,7 @@
             ${rows.map(el => `
                 <tr>
                   <td>
-                    <div class="my-like" onclick="toggleLike(event)">
+                    <div class="my-like" data-sid="${el.sid}" onclick="toggleLike(event)">
                       <i class="fa-solid fa-heart red"></i>
                       <i class="fa-regular fa-heart gray"></i>
                     </div>
@@ -93,11 +98,6 @@
     }
 
     const getData = () => {
-      const usp = new URLSearchParams(location.search);
-      // console.log(usp.get('page'));
-      // const currentPage = +usp.get('page') || 1;
-
-      // 不送資料，請求回應資料--
       fetch(`/products`)
         .then(r => r.json())
         .then(data => {
@@ -116,7 +116,39 @@
       //   heart.classList.add('yes')
       // }
       // --shorten: if 'yes' is set remove it, otherwise add it--
-      heart.classList.toggle('yes')
+      // heart.classList.toggle('yes');
+
+      const sid = heart.getAttribute('data-sid');
+      console.log('sid', sid);
+
+      // url 要從 domain 之後開始--
+      fetch(`/products/toggle-like/${sid}`)
+        .then(r => r.json())
+        .then(obj => {
+          console.log(obj);
+          if (obj.code === 100){
+            location.href = '/products/login'
+          }
+          if (obj.action === 'insert'){
+            if (! heart.classList.contains('yes')){
+              heart.classList.add('yes');
+            }
+            alert('收藏成功');
+          } else {
+            if (heart.classList.contains('yes')){
+              heart.classList.remove('yes');
+            }
+            alert('取消收藏');
+          }
+        })
+    }
+
+    const sendLogout = (e) => {
+      fetch('/products/logout')
+        .then(r => r.json())
+        .then(res => {
+          console.log(res)
+        })
     }
 
     getData();

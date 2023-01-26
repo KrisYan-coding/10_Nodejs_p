@@ -63,8 +63,13 @@
       console.log('obj', obj);
       if (obj.success){
         alert('登入成功');
+        // ---[跳至原本要去的地方]
         console.log(lastPage); // /address-book/add
         location.href = lastPage; // location.href 要用 originalUrl
+
+        // ---[跳回上一個頁面]
+        // location.href = document.referrer;
+
       } else {
         alert('登入失敗');
         console.log('obj.errors', obj.errors);
