@@ -48,6 +48,7 @@
               <th scope="col">出版日期</th>
               <th scope="col">價格</th>
               <th scope="col">數量</th>
+              <th scope="col">編輯數量</th>
             </tr>
           </thead>
           <tbody>
@@ -64,20 +65,30 @@
                   <td>${dayjs(el.publish_date).format('YYYY-MM-DD')}</td>
                   <td>${el.price}</td>
                   <td>${el.quantity}</td>
+                  <td>
+                    <a href="javascript: changeQuan('add', ${el.sid})"><i class="fa-solid fa-circle-plus"></i></a>
+                    <a href="javascript: changeQuan('minus', ${el.sid})"><i class="fa-solid fa-circle-minus"></i></a>
+                  </td>
                 </tr>`
             ).join('')}
           </tbody>
         </table>`;
     }
+    
 
+    const render = () => {
+      document.querySelector('.tableContainer').innerHTML = renderTable(cart);
+    }
+
+    // 拿到購物車資料--
     const getData = async () => {
       try{
         const str = localStorage.getItem('cart');
+        // console.log('str', str);
         cart = JSON.parse(str);
       } catch (ex){}
 
-      document.querySelector('.tableContainer').innerHTML = renderTable(cart);
-
+      render();
     }
 
     // 加入購物車--
@@ -102,17 +113,37 @@
       return true;
     }
 
-    getData();
+    // 刪除購物車資料--
+    const removeItem = (pid) => {
+      cart = cart.filter(item => {
+        return item.sid !== pid;
+      })
 
-    // 初始化購物車--
-    try{
-      // 拿到儲存在 localStorage 的購物車資料--
-      const str = localStorage.getItem('cart');
-      if (str){
-        cart = JSON.parse(str);
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      render();
+    }
+
+    // 變更商品數量--
+    const changeQuan = (type, pid) => {
+      const item = cart.find(el => el.sid === pid);
+
+      if (type === 'add'){
+        item.quantity += 1;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        render();
+      } else {
+        if (item.quantity === 1){
+          removeItem(pid)
+        } else {
+          item.quantity -= 1;
+          localStorage.setItem('cart', JSON.stringify(cart));
+          render();
+        }
       }
-    } catch (ex){}
+    }
 
+    getData();
 
     // history.pushState() 產生的 url 會 push 進 array，增加 history.length +1，但不會跳轉頁面，按上下頁到這些 url時也不會跳轉頁面， 
     window.addEventListener('popstate', () => {
