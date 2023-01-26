@@ -90,5 +90,42 @@ router.get('/login', (req, res) => {
   return res.redirect('/login');
 });
 
+// ----------[toggleLike_try]
+router.get('/products-likes', async (req, res) => {
+
+  if (! req.session.user){
+    return res.json([]);
+  }
+
+  const mid = req.session.user.id;
+
+  const sql = "SELECT * FROM `product_likes` WHERE `member_id`=?";
+
+  const [rows] = await db.query(sql, [mid]);
+
+  return res.json(rows);
+});
+
+router.get('/likes', async (req, res) => {
+  const output = {
+    logined: false,
+    error: '',
+    likes : []
+  };
+
+  if (!req.session.user){
+    output.error = '沒有登入';
+    return res.json(output);
+  }
+
+  output.logined = true;
+
+  const sql = "SELECT product_id FROM `product_likes` WHERE `member_id`=? ORDER BY created_at DESC";
+  const [rows] = await db.query(sql, req.session.user.id);
+  output.likes = rows;
+
+  return res.json(output);
+});
+
 
 module.exports = router;
