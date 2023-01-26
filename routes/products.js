@@ -120,7 +120,7 @@ router.get('/likes', async (req, res) => {
 
   output.logined = true;
 
-  const sql = "SELECT product_id FROM `product_likes` WHERE `member_id`=? ORDER BY created_at DESC";
+  const sql = "SELECT p.*, pl.product_id FROM `product_likes` AS pl JOIN products AS p ON pl.product_id=p.sid WHERE pl.`member_id`=? ORDER BY pl.`created_at` DESC";
   const [rows] = await db.query(sql, req.session.user.id);
   output.likes = rows;
 
@@ -129,3 +129,4 @@ router.get('/likes', async (req, res) => {
 
 
 module.exports = router;
+

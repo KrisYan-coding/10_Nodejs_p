@@ -46,3 +46,6 @@ SELECT o.member_sid, od.*, p.bookname FROM `orders` AS o LEFT JOIN order_details
 
 -- 1號顧客對應的訂單明細、產品名稱，產品名稱不要重複，時間排序
 SELECT o.member_sid, o.order_date, od.*, p.bookname FROM `orders` AS o LEFT JOIN order_details AS od ON o.sid = od.order_sid LEFT JOIN products AS p ON od.product_sid=p.sid WHERE o.member_sid=1 GROUP BY p.sid ORDER BY o.order_date ASC;
+
+-- 所有商品中，3號顧客對應的喜好商品
+SELECT * FROM `products` p LEFT JOIN product_likes pl ON p.sid=pl.product_id AND pl.member_id=3;
