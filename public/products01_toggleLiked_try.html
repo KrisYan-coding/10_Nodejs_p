@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>商品列表</title>
+
+  <!-- BS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- fontawesome (不用 CDN 的方式，路徑不要加 . )-->
+  <link rel="stylesheet" href="/fontawesome/css/all.css" />
+
+  <style>
+    .red{
+      color: red;
+    }
+    .gray{
+      color: gray;
+    }
+
+    .my-like .fa-solid{
+      display: none;
+    }
+    .my-like .fa-regular{
+      display: inline-block;
+    }
+    .my-like.yes .fa-solid{
+      display: inline-block;
+    }
+    .my-like.yes .fa-regular{
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <button onclick="sendLogout(event)">logout</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col tableContainer"></div>
+    </div>
+  </div>
+
+  <!-- bootstrap CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- dayjs CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+
+  <!-- moment CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+  
+
+  <script>
+    let myData;
+    let myLikeData;
+
+    const renderTable = (rows, likeRows) => {
+      console.log('likeRows', likeRows);
+      return `
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">最愛</th>
+              <th scope="col">#</th>
+              <th scope="col">作者</th>
+              <th scope="col">書名</th>
+              <th scope="col">書號</th>
+              <th scope="col">出版日期</th>
+              <th scope="col">價格</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(el => `
+                <tr>
+                  <td>
+                    <div class="my-like ${likeRows.filter(item => {return item.product_id === el.sid}).length > 0 ? 'yes' : ''}" data-sid="${el.sid}" onclick="toggleLike(event)">
+                      <i class="fa-solid fa-heart red"></i>
+                      <i class="fa-regular fa-heart gray"></i>
+                    </div>
+                  </td>
+                  <td>${el.sid}</td>
+                  <td>${el.author}</td>
+                  <td>${el.bookname}</td>
+                  <td>${el.book_id}</td>
+                  <td>${dayjs(el.publish_date).format('YYYY-MM-DD')}</td>
+                  <td>${el.price}</td>
+                </tr>`
+            ).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    const getData = () => {
+      fetch(`/products`)
+        .then(r => r.json())
+        .then(data => {
+          console.log(data);
+          myData = data;
+          document.querySelector('.tableContainer').innerHTML = renderTable(data, myLikeData);
+        })
+    }
+
+    const toggleLike = (e) => {
+      // console.log(e.currentTarget.classList.contains('yes'))
+      const heart = e.currentTarget;
+      // if (heart.classList.contains('yes')){
+      //   heart.classList.remove('yes');
+      // } else {
+      //   heart.classList.add('yes')
+      // }
+      // --shorten: if 'yes' is set remove it, otherwise add it--
+      // heart.classList.toggle('yes');
+
+      const sid = heart.getAttribute('data-sid');
+      console.log('sid', sid);
+
+      // url 要從 domain 之後開始--
+      fetch(`/products/toggle-like/${sid}`)
+        .then(r => r.json())
+        .then(obj => {
+          console.log(obj);
+          if (obj.code === 100){
+            location.href = '/products/login'
+          }
+          if (obj.action === 'insert'){
+            if (! heart.classList.contains('yes')){
+              heart.classList.add('yes');
+            }
+            alert('收藏成功');
+          } else if (obj.action === 'delete') {
+            if (heart.classList.contains('yes')){
+              heart.classList.remove('yes');
+            }
+            alert('取消收藏');
+          }
+        })
+    }
+
+    const sendLogout = (e) => {
+      fetch('/products/logout')
+        .then(r => r.json())
+        .then(res => {
+          console.log(res)
+        })
+    }
+
+    const toggleAdded = () => {
+      fetch(`/products/products-likes`)
+        .then(r => r.json())
+        .then(data => {
+          console.log('data-likes', data);
+          myLikeData = data;
+        })
+    }
+
+    toggleAdded();
+    getData();
+
+    // history.pushState() 產生的 url 會 push 進 array，增加 history.length +1，但不會跳轉頁面，按上下頁到這些 url時也不會跳轉頁面， 
+    window.addEventListener('popstate', () => {
+      getData();
+    })
+  </script>
+
+</body>
+
+</html>
