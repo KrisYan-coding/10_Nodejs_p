@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>商品列表-加入購物車</title>
+
+  <!-- BS CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- fontawesome (不用 CDN 的方式，路徑不要加 . )-->
+  <link rel="stylesheet" href="/fontawesome/css/all.css" />
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <button onclick="sendLogout(event)">logout</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col tableContainer"></div>
+    </div>
+  </div>
+
+  <!-- bootstrap CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- dayjs CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+
+  <!-- moment CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+
+  
+
+  <script>
+    let myData;
+    let cart = [];
+
+    const renderTable = (rows) => {
+      return `
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">加入購物車</th>
+              <th scope="col">#</th>
+              <th scope="col">作者</th>
+              <th scope="col">書名</th>
+              <th scope="col">出版日期</th>
+              <th scope="col">價格</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(el => `
+                <tr>
+                  <td>
+                    <a data-sid="${el.sid}" href="javascript: addToCart(${el.sid})">
+                      <i class="fa-solid fa-cart-shopping"></i>
+                    </a>
+                  </td>
+                  <td>${el.sid}</td>
+                  <td>${el.author}</td>
+                  <td>${el.bookname}</td>
+                  <td>${dayjs(el.publish_date).format('YYYY-MM-DD')}</td>
+                  <td>${el.price}</td>
+                </tr>`
+            ).join('')}
+          </tbody>
+        </table>`;
+    }
+
+    const getData = async () => {
+      const r1 = await fetch(`/products`);
+      myData = await r1.json();
+      document.querySelector('.tableContainer').innerHTML = renderTable(myData);
+
+    }
+
+    const sendLogout = (e) => {
+      fetch('/products/logout')
+        .then(r => r.json())
+        .then(res => {
+          console.log(res);
+          location.reload();
+        })
+    }
+
+    const addToCart = (pid) => {
+      console.log('addToCart');
+      let item = cart.find(el => el.sid===pid);
+      console.log('cart', cart);
+      console.log('item', item);
+      if (!item){
+        // 如果購物車裡面沒有這項商品--
+        item = myData.find(el => el.sid === pid);
+        cart.push({...item, quantity: 1});
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+      } else {
+        item.quantity += 1;
+        // --改變第二層以後的
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+      }
+
+      return true;
+    }
+
+    getData();
+
+    // 初始化購物車--
+    try{
+      // 拿到儲存在 localStorage 的購物車資料--
+      const str = localStorage.getItem('cart');
+      if (str){
+        cart = JSON.parse(str);
+      }
+    } catch (ex){}
+
+
+    // history.pushState() 產生的 url 會 push 進 array，增加 history.length +1，但不會跳轉頁面，按上下頁到這些 url時也不會跳轉頁面， 
+    window.addEventListener('popstate', () => {
+      getData();
+    })
+  </script>
+
+</body>
+
+</html>
